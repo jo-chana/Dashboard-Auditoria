@@ -1,0 +1,3451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Auditoría — Edificio Brooklyn — Abril–Mayo 2026</title>
+<style>
+  /* ====== LAR GROUP BRAND SYSTEM ======
+     Pantone 7467 C  →  #00A8B4   (turquesa corporativo)
+     Pantone Cool Gray 9 C → #747678  (gris corporativo)
+     Tipografía: Aileron (corporativa primaria) — fallback Arial (secundaria de sistema)
+  ====================================== */
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --turquesa:        #00A8B4;
+    --turquesa-700:    #007F88;
+    --turquesa-300:    #5FC4CB;
+    --turquesa-100:    #CCEEF1;
+    --turquesa-50:     #E6F6F8;
+
+    --gris:            #747678;
+    --gris-700:        #4A4C4E;
+    --gris-500:        #8E9092;
+    --gris-300:        #C8CACC;
+    --gris-200:        #E1E2E4;
+    --gris-100:        #EFF0F1;
+    --gris-50:         #F7F8F9;
+
+    --ink:             #2E3032;     /* texto principal — gris muy oscuro, legible */
+    --ink-dim:         var(--gris);
+    --ink-faint:       var(--gris-500);
+
+    --bg:              #FFFFFF;
+    --bg-soft:         var(--gris-50);
+
+    /* 4 niveles de cumplimiento:
+       ≥ 95%  Excelente    → turquesa LAR
+       ≥ 90%  Esperado     → verde
+       ≥ 85%  Atención     → amarillo
+       <  85% Intervención → rojo                                       */
+    --excellent:       var(--turquesa);   /* #00A8B4 */
+    --excellent-soft:  var(--turquesa-50);
+    --good:            #4CAF50;
+    --good-soft:       #E8F5E9;
+    --warn:            #E0B53C;
+    --warn-soft:       #FBF3D7;
+    --bad:             #C84B4B;
+    --bad-soft:        #FBEDED;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', 'Aileron', Arial, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 64px 120px;
+    position: relative;
+  }
+
+  /* ====== TÍTULOS ESTILO TEMPLATE LAR ====== */
+  h1 {
+    font-size: 44px;
+    font-weight: 300;
+    color: var(--turquesa);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+  }
+  h1 em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--turquesa);
+  }
+  h2 {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--turquesa);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .subtitulo {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--gris);
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+  /* Línea horizontal gris que separa título y subtítulo (estilo template) */
+  .title-rule {
+    height: 2px;
+    background: var(--gris-300);
+    border: none;
+    margin: 10px 0 14px;
+    width: 100%;
+  }
+
+  /* SUBTITULO O ENCABEZADO DE BLOQUE — dos variantes (gris bold / turquesa bold), mayúsculas */
+  .bloque-titulo {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .bloque-titulo.acento {
+    color: var(--turquesa);
+  }
+
+  /* ====== HEADER ====== */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+  .header-meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .header-right {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .building-logo {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    padding: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .header-aside {
+    text-align: right;
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.9;
+  }
+  .header-aside .label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 10px;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  /* ====== SELECTOR DE EDIFICIOS ====== */
+  .building-selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding: 18px 22px;
+    background: var(--bg-soft);
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+  }
+  .building-selector-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    font-weight: 600;
+    padding-right: 16px;
+    border-right: 1px solid var(--gris-300);
+  }
+  .building-pills { display: flex; gap: 8px; flex: 1; }
+  .building-pill {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 22px;
+    background: #fff;
+    border: 1px solid var(--gris-300);
+    color: var(--gris);
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.03em;
+    transition: all 0.18s ease;
+  }
+  .building-pill:hover {
+    color: var(--turquesa);
+    border-color: var(--turquesa-300);
+  }
+  .building-pill.active {
+    background: var(--turquesa);
+    border-color: var(--turquesa);
+    color: #fff;
+    font-weight: 600;
+  }
+  .building-pill .pct {
+    font-size: 11px;
+    margin-left: 10px;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+  .building-pill.active .pct { opacity: 0.95; }
+  .building-portfolio-avg {
+    font-size: 11px;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-left: auto;
+    font-weight: 500;
+  }
+  .building-portfolio-avg .num {
+    color: var(--turquesa);
+    font-weight: 700;
+    margin-left: 6px;
+    letter-spacing: 0;
+  }
+
+  /* ====== SECCIONES (estilo slide LAR) ====== */
+  .section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 10px;
+  }
+  .section-num {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    font-weight: 600;
+  }
+  .section-title {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--turquesa);
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .section-title em { font-style: normal; font-weight: 600; }
+  .section-aside {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+  }
+  .section-rule {
+    height: 2px;
+    background: var(--gris-300);
+    border: none;
+    margin: 0 0 28px;
+  }
+
+  /* ====== PLACEHOLDER (futuras secciones) ====== */
+  .placeholder {
+    background: var(--bg-soft);
+    border: 1px dashed var(--gris-300);
+    padding: 36px 28px;
+    text-align: center;
+    color: var(--gris-500);
+    font-size: 13px;
+  }
+  .placeholder strong {
+    display: block;
+    color: var(--gris);
+    font-size: 14px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  /* ====== HERO ====== */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 32px 36px;
+    margin-bottom: 22px;
+  }
+  .hero-main {
+    border-right: 1px solid var(--gris-200);
+    padding-right: 36px;
+  }
+  .hero-stat {
+    padding: 0 28px;
+    border-right: 1px solid var(--gris-200);
+  }
+  .hero-stat:last-child { border-right: none; padding-right: 0; }
+  .hero-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .hero-score-row {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .hero-score {
+    font-size: 72px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--turquesa);
+    letter-spacing: -0.02em;
+  }
+  .hero-score.excellent { color: var(--excellent); }
+  .hero-score.good { color: var(--good); }
+  .hero-score.warn { color: var(--warn); }
+  .hero-score.bad { color: var(--bad); }
+  .hero-score .pct {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--gris-500);
+    margin-left: 4px;
+  }
+  /* Label de categoría que aparece junto al score */
+  .cat-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 2px;
+    border: 1px solid;
+    line-height: 1;
+  }
+  .cat-label.excellent { color: var(--excellent); background: var(--excellent-soft); border-color: var(--excellent); }
+  .cat-label.good      { color: var(--good);      background: var(--good-soft);      border-color: var(--good); }
+  .cat-label.warn      { color: var(--warn);      background: var(--warn-soft);      border-color: var(--warn); }
+  .cat-label.bad       { color: var(--bad);       background: var(--bad-soft);       border-color: var(--bad); }
+
+  /* Versión pequeña del cat-label para las aristas */
+  .cat-label-sm {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+    line-height: 1.2;
+    margin-top: 8px;
+  }
+  .cat-label-sm.excellent { color: var(--excellent); background: var(--excellent-soft); }
+  .cat-label-sm.good      { color: var(--good);      background: var(--good-soft); }
+  .cat-label-sm.warn      { color: var(--warn);      background: var(--warn-soft); }
+  .cat-label-sm.bad       { color: var(--bad);       background: var(--bad-soft); }
+
+  .hero-label {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--gris);
+  }
+  .hero-stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .hero-stat-value {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  /* Variante para el puntaje: % grande */
+  .hero-stat-value.big-pct {
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--turquesa);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .hero-stat-value.big-pct .pct {
+    font-size: 24px;
+    color: var(--gris-500);
+    margin-left: 2px;
+  }
+  .hero-stat-sub {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--gris-500);
+  }
+
+  /* Delta indicators */
+  .delta {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .delta.up   { color: var(--turquesa-700); background: var(--turquesa-50); }
+  .delta.down { color: var(--bad);          background: #FBEDED; }
+  .delta.flat { color: var(--gris-500);     background: var(--gris-100); }
+
+  /* ====== COMPARE STRIP ====== */
+  .compare-strip {
+    background: var(--turquesa-50);
+    border-left: 3px solid var(--turquesa);
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--gris-700);
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+  .compare-strip .label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 10px;
+    color: var(--gris-500);
+    font-weight: 600;
+  }
+  .compare-strip .num { color: var(--ink); font-weight: 600; }
+  .compare-strip .num.accent { color: var(--turquesa); }
+
+  /* ====== LEGEND ====== */
+  .legend {
+    display: flex;
+    gap: 24px;
+    font-size: 10px;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; }
+  .legend-swatch { width: 11px; height: 11px; border-radius: 1px; }
+
+  /* ====== ARISTAS GRID ====== */
+  .aristas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .arista-card {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    padding: 22px 22px 20px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    border-radius: 2px;
+  }
+  .arista-card:hover {
+    border-color: var(--turquesa-300);
+    box-shadow: 0 4px 12px rgba(0, 168, 180, 0.08);
+  }
+  .arista-card.open {
+    border-color: var(--turquesa);
+    box-shadow: 0 4px 14px rgba(0, 168, 180, 0.15);
+  }
+  .arista-name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin-bottom: 14px;
+    padding-right: 28px;
+  }
+  .arista-card.open .arista-name { color: var(--turquesa); }
+  .arista-score {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .arista-pct {
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--turquesa);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .arista-pct.excellent { color: var(--excellent); }
+  .arista-pct.good { color: var(--good); }
+  .arista-pct.warn { color: var(--warn); }
+  .arista-pct.bad  { color: var(--bad); }
+  .arista-unit {
+    font-size: 18px;
+    color: var(--gris-500);
+    margin-left: 3px;
+  }
+  .arista-bar {
+    position: relative;
+    height: 4px;
+    background: var(--gris-100);
+    border-radius: 2px;
+    margin-bottom: 10px;
+    overflow: visible;
+  }
+  .arista-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--turquesa);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .arista-bar-fill.excellent { background: var(--excellent); }
+  .arista-bar-fill.good { background: var(--good); }
+  .arista-bar-fill.warn { background: var(--warn); }
+  .arista-bar-fill.bad  { background: var(--bad); }
+  .arista-bar-marker {
+    position: absolute;
+    top: -3px;
+    width: 2px;
+    height: 10px;
+    background: var(--gris-700);
+    transform: translateX(-50%);
+  }
+  .arista-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--gris-500);
+    margin-top: 6px;
+  }
+  .arista-vs {
+    font-size: 11px;
+    color: var(--gris-500);
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--gris-100);
+  }
+  .arista-vs .diff {
+    font-weight: 600;
+    margin-left: 4px;
+  }
+  .arista-vs .diff.up   { color: var(--turquesa-700); }
+  .arista-vs .diff.down { color: var(--bad); }
+  .expand-hint {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    color: var(--gris-300);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .arista-card.open .expand-hint { color: var(--turquesa); }
+
+  /* ====== DRILLDOWN ====== */
+  .drilldown {
+    background: var(--bg-soft);
+    border: 1px solid var(--gris-200);
+    border-left: 3px solid var(--turquesa);
+    padding: 28px 30px;
+    margin-top: 18px;
+    margin-bottom: 28px;
+    border-radius: 2px;
+    display: none;
+  }
+  .drilldown.open { display: block; }
+  .drilldown-header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gris-200);
+  }
+  .drilldown-title {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--turquesa);
+  }
+  .drilldown-title em { font-style: normal; font-weight: 600; }
+  .drilldown-close {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--gris-300);
+    color: var(--gris-500);
+    padding: 5px 14px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 2px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+  }
+  .drilldown-close:hover {
+    color: var(--turquesa);
+    border-color: var(--turquesa);
+  }
+
+  .area-group { margin-bottom: 26px; }
+  .area-group:last-child { margin-bottom: 0; }
+  .area-header {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gris-200);
+  }
+  .area-name {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--turquesa);
+  }
+  .area-avg {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  .area-avg .num { color: var(--ink); font-weight: 700; }
+  .item-row {
+    display: grid;
+    grid-template-columns: 1fr 60px 120px;
+    gap: 14px;
+    padding: 7px 0;
+    align-items: center;
+    font-size: 12.5px;
+    color: var(--gris-700);
+  }
+  .item-name { line-height: 1.4; }
+  .item-score {
+    text-align: right;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--turquesa);
+  }
+  .item-score.excellent { color: var(--excellent); }
+  .item-score.good { color: var(--good); }
+  .item-score.warn { color: var(--warn); }
+  .item-score.bad  { color: var(--bad); }
+  .item-bar {
+    height: 4px;
+    background: var(--gris-100);
+    position: relative;
+    border-radius: 2px;
+  }
+  .item-bar-fill {
+    height: 100%;
+    background: var(--turquesa);
+    border-radius: 2px;
+  }
+  .item-bar-fill.excellent { background: var(--excellent); }
+  .item-bar-fill.good { background: var(--good); }
+  .item-bar-fill.warn { background: var(--warn); }
+  .item-bar-fill.bad  { background: var(--bad); }
+  .obs-row {
+    grid-column: 1 / -1;
+    font-size: 11.5px;
+    color: var(--gris-500);
+    font-style: italic;
+    padding: 4px 0 6px 12px;
+    border-left: 2px solid var(--gris-300);
+    margin: 4px 0 6px;
+  }
+
+  /* ====== NOTA ====== */
+  .nota {
+    background: var(--turquesa-50);
+    border-left: 3px solid var(--turquesa);
+    padding: 18px 22px;
+    margin: 28px 0;
+    font-size: 13px;
+    color: var(--gris-700);
+    line-height: 1.7;
+    border-radius: 0 2px 2px 0;
+  }
+  .nota strong {
+    display: block;
+    color: var(--turquesa);
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+  }
+
+  /* ====== FOOTER (LOGO LAR GROUP esquina inferior derecha) ====== */
+  .footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gris-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gris-500);
+    font-weight: 500;
+  }
+  .footer-left { padding-bottom: 18px; }
+  .footer-logo-wrap {
+    flex-shrink: 0;
+  }
+  #footer-logo-img {
+    width: 86px;
+    height: 86px;
+    object-fit: contain;
+    border-radius: 2px;
+    display: block;
+  }
+
+  /* ====== EVOLUCIÓN HISTÓRICA ====== */
+  .hist-note {
+    font-size: 12px;
+    color: var(--gris-500);
+    margin-bottom: 18px;
+  }
+  .hist-chart-wrap {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 24px 28px 18px;
+  }
+  .hist-chart-wrap svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: inherit;
+  }
+  .hist-chart-wrap text { font-family: inherit; }
+  .hist-dims-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .hist-dim-card {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 18px 20px;
+  }
+  .hist-dim-card .dim-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--turquesa);
+    margin-bottom: 4px;
+  }
+  .hist-dim-card .dim-current {
+    font-size: 11px;
+    color: var(--gris-500);
+    margin-bottom: 8px;
+  }
+  .hist-dim-card .dim-current .num {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .hist-dim-card svg {
+    display: block;
+    width: 100%;
+    height: 70px;
+  }
+  .hist-dim-card .dim-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--gris-500);
+    margin-top: 4px;
+  }
+
+  /* ====== PULSO INTERNO ====== */
+  .pulso-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 28px 32px;
+    margin-bottom: 22px;
+  }
+  .pulso-hero > div {
+    padding: 0 24px;
+    border-right: 1px solid var(--gris-200);
+  }
+  .pulso-hero > div:first-child { padding-left: 0; }
+  .pulso-hero > div:last-child { border-right: none; padding-right: 0; }
+  .pulso-empty {
+    background: var(--bg-soft);
+    border: 1px dashed var(--gris-300);
+    padding: 28px;
+    text-align: center;
+    color: var(--gris-500);
+    font-size: 13px;
+    border-radius: 2px;
+  }
+  .pulso-questions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .pulso-question {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.18s ease;
+  }
+  .pulso-question:hover { border-color: var(--turquesa-300); }
+  .pulso-q-header {
+    display: grid;
+    grid-template-columns: 1fr 70px 200px 30px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .pulso-q-label {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .pulso-q-score {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--turquesa);
+  }
+  .pulso-q-score.excellent { color: var(--excellent); }
+  .pulso-q-score.good { color: var(--good); }
+  .pulso-q-score.warn { color: var(--warn); }
+  .pulso-q-score.bad { color: var(--bad); }
+  .pulso-q-score .max { font-size: 11px; color: var(--gris-500); font-weight: 400; margin-left: 2px; }
+  .pulso-q-bar {
+    height: 6px;
+    background: var(--gris-100);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .pulso-q-bar-fill {
+    height: 100%;
+    background: var(--turquesa);
+    transition: width 0.4s ease;
+  }
+  .pulso-q-bar-fill.excellent { background: var(--excellent); }
+  .pulso-q-bar-fill.good { background: var(--good); }
+  .pulso-q-bar-fill.warn { background: var(--warn); }
+  .pulso-q-bar-fill.bad { background: var(--bad); }
+  .pulso-q-toggle {
+    text-align: right;
+    color: var(--gris-300);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .pulso-question.open .pulso-q-toggle { color: var(--turquesa); }
+  .pulso-q-body {
+    display: none;
+    padding: 0 22px 16px;
+    background: var(--bg-soft);
+    border-top: 1px solid var(--gris-200);
+  }
+  .pulso-question.open .pulso-q-body { display: block; }
+  .pulso-comment {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gris-200);
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .pulso-comment:last-child { border-bottom: none; }
+  .pulso-comment-meta {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gris-500);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .pulso-comment-meta .score-pill {
+    display: inline-block;
+    padding: 1px 6px;
+    background: var(--gris-100);
+    border-radius: 2px;
+    margin-left: 4px;
+    color: var(--ink);
+  }
+  .pulso-no-comments {
+    padding: 12px 0;
+    font-size: 12px;
+    color: var(--gris-500);
+    font-style: italic;
+  }
+
+  /* ====== TOGGLE COMPLIANCE ====== */
+  .compliance-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    background: var(--bg-soft);
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 14px 20px;
+    margin-bottom: 22px;
+  }
+  .compliance-toggle-label {
+    flex: 1;
+    min-width: 0;
+  }
+  .ct-eyebrow {
+    display: block;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--turquesa);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .ct-hint {
+    display: block;
+    font-size: 11.5px;
+    color: var(--gris-500);
+    line-height: 1.4;
+  }
+  .compliance-toggle-controls {
+    display: flex;
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .ct-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: all 0.2s ease;
+    border-right: 1px solid var(--gris-200);
+  }
+  .ct-btn:last-child { border-right: none; }
+  .ct-btn:hover { background: var(--bg-soft); }
+  .ct-btn.active {
+    background: var(--turquesa);
+  }
+  .ct-btn-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .ct-btn-sub {
+    display: block;
+    font-size: 9.5px;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .ct-btn.active .ct-btn-label,
+  .ct-btn.active .ct-btn-sub { color: #fff; }
+
+  /* ====== TABS DE VISTA ====== */
+  .view-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--gris-200);
+  }
+  .view-tab {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 14px 28px 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    margin-bottom: -1px;
+    font-family: inherit;
+  }
+  .view-tab:hover {
+    background: var(--bg-soft);
+  }
+  .view-tab.active {
+    border-bottom-color: var(--turquesa);
+  }
+  .view-tab-eyebrow {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .view-tab-label {
+    display: block;
+    font-size: 14px;
+    color: var(--ink-dim);
+    font-weight: 500;
+  }
+  .view-tab.active .view-tab-label {
+    color: var(--turquesa);
+    font-weight: 700;
+  }
+  .view-tab.active .view-tab-eyebrow {
+    color: var(--turquesa);
+  }
+
+  /* ====== VISTA PORTAFOLIO ====== */
+
+  /* Resumen promedio portafolio (actual vs anterior) */
+  .ptf-summary-wrap {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 28px 32px;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 0;
+  }
+  .ptf-summary-block {
+    padding: 0 28px;
+    border-right: 1px solid var(--gris-200);
+  }
+  .ptf-summary-block:first-child { padding-left: 0; }
+  .ptf-summary-block:last-child { border-right: none; padding-right: 0; }
+  .ptf-summary-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .ptf-summary-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .ptf-summary-big {
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .ptf-summary-big.excellent { color: var(--excellent); }
+  .ptf-summary-big.good { color: var(--good); }
+  .ptf-summary-big.warn { color: var(--warn); }
+  .ptf-summary-big.bad { color: var(--bad); }
+  .ptf-summary-big .pct {
+    font-size: 26px;
+    color: var(--gris-500);
+    margin-left: 2px;
+    font-weight: 400;
+  }
+  .ptf-summary-sub {
+    font-size: 12px;
+    color: var(--gris-500);
+    margin-top: 10px;
+  }
+  .ptf-summary-prev {
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--ink-dim);
+    line-height: 1;
+  }
+  .ptf-summary-prev .pct {
+    font-size: 18px;
+    color: var(--gris-500);
+    margin-left: 2px;
+  }
+  .ptf-summary-delta-big {
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .ptf-summary-delta-big.up { color: var(--good); }
+  .ptf-summary-delta-big.down { color: var(--bad); }
+  .ptf-summary-delta-big.flat { color: var(--gris-500); }
+
+  /* Small multiples por edificio */
+  .ptf-multiples {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .ptf-mult-card {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 18px 20px 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .ptf-mult-card:hover {
+    border-color: var(--turquesa-300);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+  .ptf-mult-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .ptf-mult-name {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+  }
+  .ptf-mult-current {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .ptf-mult-current.excellent { color: var(--excellent); }
+  .ptf-mult-current.good { color: var(--good); }
+  .ptf-mult-current.warn { color: var(--warn); }
+  .ptf-mult-current.bad { color: var(--bad); }
+  .ptf-mult-card svg {
+    width: 100%;
+    height: 110px;
+    display: block;
+  }
+  .ptf-mult-foot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--gris-500);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Cards comparativas */
+  .ptf-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 12px;
+  }
+  .ptf-card {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 22px 24px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  .ptf-card:hover {
+    border-color: var(--turquesa-300);
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+  .ptf-card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gris-200);
+  }
+  .ptf-card-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    background: #000;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .ptf-card-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .ptf-card-meta {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gris-500);
+    font-weight: 500;
+  }
+  .ptf-card-score-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .ptf-card-score {
+    font-size: 44px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .ptf-card-score.excellent { color: var(--excellent); }
+  .ptf-card-score.good { color: var(--good); }
+  .ptf-card-score.warn { color: var(--warn); }
+  .ptf-card-score.bad { color: var(--bad); }
+  .ptf-card-score .pct {
+    font-size: 20px;
+    color: var(--gris-500);
+    margin-left: 2px;
+  }
+  .ptf-card-trend {
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ptf-card-trend .arrow.up { color: var(--good); font-weight: 700; }
+  .ptf-card-trend .arrow.down { color: var(--bad); font-weight: 700; }
+  .ptf-card-trend .arrow.flat { color: var(--gris-500); }
+  .ptf-card-mini {
+    margin-top: 10px;
+  }
+  .ptf-card-mini svg {
+    width: 100%;
+    height: 50px;
+    display: block;
+  }
+  .ptf-card-rank {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gris-500);
+    background: var(--bg-soft);
+    padding: 4px 8px;
+    border-radius: 2px;
+  }
+  .ptf-card-rank.first { color: var(--turquesa); background: var(--turquesa-50); }
+
+  /* Tabla comparativa */
+  .ptf-table-wrap {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    overflow-x: auto;
+  }
+  .ptf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .ptf-table thead th {
+    text-align: left;
+    padding: 14px 18px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gris-500);
+    font-weight: 700;
+    background: var(--bg-soft);
+    border-bottom: 2px solid var(--gris-200);
+    white-space: nowrap;
+  }
+  .ptf-table thead th.col-build {
+    text-align: center;
+    background: var(--turquesa-50);
+    color: var(--turquesa);
+    border-bottom-color: var(--turquesa-300);
+  }
+  .ptf-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--gris-200);
+    vertical-align: middle;
+  }
+  .ptf-table tbody tr:last-child td { border-bottom: none; }
+  .ptf-table tbody tr.row-total td {
+    background: var(--bg-soft);
+    font-weight: 700;
+    border-top: 2px solid var(--gris-300);
+  }
+  .ptf-table .dim-cell {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .ptf-cell {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .ptf-cell-pct {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 13.5px;
+    min-width: 56px;
+  }
+  .ptf-cell-pct.excellent { color: var(--excellent); background: var(--excellent-soft); }
+  .ptf-cell-pct.good      { color: var(--good);      background: var(--good-soft); }
+  .ptf-cell-pct.warn      { color: var(--warn);      background: var(--warn-soft); }
+  .ptf-cell-pct.bad       { color: var(--bad);       background: var(--bad-soft); }
+  .ptf-cell-delta {
+    display: block;
+    font-size: 10px;
+    color: var(--gris-500);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .ptf-cell-delta.up { color: var(--good); }
+  .ptf-cell-delta.down { color: var(--bad); }
+
+  /* Leyenda del chart */
+  .ptf-legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+  .ptf-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ptf-legend-swatch {
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  /* Histórico por dimensión */
+  .ptf-dim-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .ptf-dim-card {
+    background: #fff;
+    border: 1px solid var(--gris-200);
+    border-radius: 2px;
+    padding: 18px 20px;
+  }
+  .ptf-dim-card .dim-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--turquesa);
+    margin-bottom: 12px;
+  }
+  .ptf-dim-card svg {
+    width: 100%;
+    height: 90px;
+    display: block;
+  }
+  .ptf-dim-card-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 10.5px;
+    color: var(--gris-500);
+  }
+  .ptf-dim-card-legend .build {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .ptf-dim-card-legend .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 1000px) {
+    .container { padding: 36px 28px 80px; }
+    h1 { font-size: 32px; }
+    .header { grid-template-columns: 1fr; }
+    .header-aside { text-align: left; }
+    .hero { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+    .hero-main, .hero-stat { border-right: none; border-bottom: 1px solid var(--gris-200); padding: 0 0 20px; }
+    .hero-stat { padding: 20px 0; }
+    .hero-stat:last-child { border-bottom: none; padding-bottom: 0; }
+    .aristas-grid { grid-template-columns: 1fr; }
+    .item-row { grid-template-columns: 1fr auto; }
+    .item-bar { grid-column: 1 / -1; }
+    .building-selector { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px; }
+    .building-selector-label { border-right: none; border-bottom: 1px solid var(--gris-300); padding-right: 0; padding-bottom: 10px; }
+    .building-pills { flex-wrap: wrap; }
+    .building-portfolio-avg { margin-left: 0; }
+    .compare-strip { flex-wrap: wrap; gap: 12px 22px; }
+    .header-right { flex-direction: row-reverse; justify-content: flex-end; align-items: flex-start; }
+    .header-aside { text-align: left; }
+    .building-logo { width: 80px; height: 80px; }
+    .hist-dims-grid { grid-template-columns: 1fr; }
+    .pulso-hero { grid-template-columns: 1fr; padding: 18px 20px; }
+    .pulso-hero > div { padding: 16px 0; border-right: none; border-bottom: 1px solid var(--gris-200); }
+    .pulso-hero > div:last-child { border-bottom: none; }
+    .pulso-q-header { grid-template-columns: 1fr auto; gap: 8px; }
+    .pulso-q-bar { grid-column: 1 / -1; }
+    .pulso-q-toggle { display: none; }
+    .view-tabs { overflow-x: auto; }
+    .view-tab { padding: 12px 18px 10px; }
+    .compliance-toggle { flex-direction: column; align-items: stretch; gap: 12px; }
+    .compliance-toggle-controls { width: 100%; }
+    .ct-btn { flex: 1; }
+    .ptf-cards { grid-template-columns: 1fr; }
+    .ptf-dim-grid { grid-template-columns: 1fr; }
+    .ptf-multiples { grid-template-columns: 1fr; }
+    .ptf-summary-wrap { grid-template-columns: 1fr; padding: 18px 20px; }
+    .ptf-summary-block { padding: 14px 0; border-right: none; border-bottom: 1px solid var(--gris-200); }
+    .ptf-summary-block:last-child { border-bottom: none; }
+    .ptf-table { font-size: 11px; }
+    .ptf-table thead th, .ptf-table tbody td { padding: 10px 8px; }
+  }
+
+  /* ====== PLAN DE ACCIÓN ====== */
+  .acc-intro {
+    background: var(--turquesa-50);
+    border-left: 3px solid var(--turquesa);
+    padding: 18px 22px;
+    margin-bottom: 28px;
+    border-radius: 0 2px 2px 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .acc-intro strong { color: var(--turquesa-700); }
+
+  .acc-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .acc-summary-card {
+    border: 1px solid var(--gris-200);
+    padding: 14px 16px;
+    border-radius: 2px;
+    background: #fff;
+  }
+  .acc-summary-card .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .acc-summary-card .value {
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--turquesa);
+    line-height: 1.1;
+  }
+  .acc-summary-card .value.alta { color: var(--bad); }
+  .acc-summary-card .value.media { color: var(--warn); }
+  .acc-summary-card .value.baja { color: var(--good); }
+  .acc-summary-card .sub {
+    font-size: 11px;
+    color: var(--gris-500);
+    margin-top: 4px;
+  }
+
+  .acc-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .acc-filters-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .acc-filter-btn {
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 6px 14px;
+    background: #fff;
+    border: 1px solid var(--gris-300);
+    color: var(--gris);
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+    transition: all 0.18s ease;
+  }
+  .acc-filter-btn:hover {
+    border-color: var(--turquesa-300);
+    color: var(--turquesa);
+  }
+  .acc-filter-btn.active {
+    background: var(--turquesa);
+    border-color: var(--turquesa);
+    color: #fff;
+  }
+  .acc-filter-btn .count {
+    font-size: 10px;
+    margin-left: 6px;
+    opacity: 0.75;
+  }
+
+  .acc-list { display: flex; flex-direction: column; gap: 10px; }
+  .acc-card {
+    border: 1px solid var(--gris-200);
+    border-left-width: 3px;
+    background: #fff;
+    border-radius: 2px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .acc-card.alta { border-left-color: var(--bad); }
+  .acc-card.media { border-left-color: var(--warn); }
+  .acc-card.baja { border-left-color: var(--good); }
+  .acc-card:hover {
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    border-color: var(--gris-300);
+  }
+  .acc-card.alta:hover { border-left-color: var(--bad); }
+  .acc-card.media:hover { border-left-color: var(--warn); }
+  .acc-card.baja:hover { border-left-color: var(--good); }
+
+  .acc-head {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+  }
+  .acc-prio {
+    display: inline-block;
+    padding: 3px 9px;
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .acc-prio.alta { background: var(--bad-soft); color: var(--bad); }
+  .acc-prio.media { background: var(--warn-soft); color: #8B6D1F; }
+  .acc-prio.baja { background: var(--good-soft); color: #2D6A30; }
+
+  .acc-head-mid { min-width: 0; }
+  .acc-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+  .acc-meta {
+    font-size: 11px;
+    color: var(--gris-500);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .acc-meta span { white-space: nowrap; }
+  .acc-meta .dim {
+    color: var(--turquesa);
+    font-weight: 600;
+  }
+
+  .acc-plazo {
+    font-size: 11px;
+    color: var(--gris-700);
+    text-align: right;
+    line-height: 1.3;
+  }
+  .acc-plazo .num {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+  }
+  .acc-plazo .unit {
+    font-size: 10px;
+    color: var(--gris-500);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .acc-toggle {
+    font-size: 11px;
+    color: var(--turquesa);
+    font-weight: 600;
+    background: var(--turquesa-50);
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  .acc-card.open .acc-toggle { transform: rotate(45deg); }
+
+  .acc-body {
+    display: none;
+    padding: 0 20px 20px 20px;
+    border-top: 1px solid var(--gris-100);
+    margin-top: 0;
+  }
+  .acc-card.open .acc-body { display: block; padding-top: 18px; }
+
+  .acc-section { margin-bottom: 16px; }
+  .acc-section:last-child { margin-bottom: 0; }
+  .acc-section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .acc-section-content {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .acc-section-content ul {
+    margin: 4px 0 0 0;
+    padding-left: 20px;
+  }
+  .acc-section-content li {
+    margin-bottom: 4px;
+  }
+
+  .acc-kpi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .acc-kpi-box {
+    background: var(--bg-soft);
+    padding: 12px 14px;
+    border-radius: 2px;
+    border: 1px solid var(--gris-200);
+  }
+  .acc-kpi-box .k-label {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gris-500);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .acc-kpi-box .k-value {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .acc-kpi-box .k-value strong {
+    color: var(--turquesa);
+    font-weight: 600;
+  }
+
+  .acc-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gris-500);
+    font-size: 13px;
+    background: var(--bg-soft);
+    border: 1px dashed var(--gris-300);
+    border-radius: 2px;
+  }
+  .acc-empty strong {
+    display: block;
+    color: var(--turquesa);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 1000px) {
+    .acc-summary { grid-template-columns: repeat(2, 1fr); }
+    .acc-head {
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 14px 16px;
+    }
+    .acc-prio { grid-column: 1; }
+    .acc-toggle { grid-column: 2; grid-row: 1; }
+    .acc-head-mid { grid-column: 1 / -1; grid-row: 2; }
+    .acc-plazo {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      text-align: left;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .acc-plazo .num { display: inline; font-size: 14px; }
+    .acc-kpi { grid-template-columns: 1fr; }
+  }
+.single-building .building-selector, body.single-building [class*="selector"]{display:none !important;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <div>
+      <div class="header-meta">Dashboard Comité Operacional y Servicio al Cliente &nbsp;·&nbsp; <span>Edición Abril–Mayo 2026</span></div>
+      <h1 id="header-h1">Auditoría <em id="header-edificio">Brooklyn</em></h1>
+      <div class="subtitulo">Reporte histórico de auditorías</div>
+      <hr class="title-rule">
+    </div>
+    <div class="header-right">
+      <img id="building-logo" class="building-logo" alt="" />
+      <div class="header-aside">
+        <div><span class="label">Edificio</span> <span id="header-nombre">Multifamily Brooklyn</span></div>
+        <div><span class="label">Auditor</span> <span id="header-auditor">Emilio Merino S.</span></div>
+        <div><span class="label">Fecha</span> <span id="header-fecha">14 / Abril / 2026</span></div>
+        <div><span class="label">Periodo</span> Q2 2026</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ TABS DE VISTA ============ -->
+  <div class="view-tabs">
+    <button class="view-tab active" data-view="edificio" onclick="switchView('edificio')">
+      <span class="view-tab-eyebrow">VISTA</span>
+      <span class="view-tab-label">Por edificio</span>
+    </button>
+    <button class="view-tab" data-view="portafolio" onclick="switchView('portafolio')">
+      <span class="view-tab-eyebrow">VISTA</span>
+      <span class="view-tab-label">Comparativo portafolio</span>
+    </button>
+  </div>
+
+  <!-- ============ TOGGLE COMPLIANCE ============ -->
+  <div class="compliance-toggle">
+    <div class="compliance-toggle-label">
+      <span class="ct-eyebrow">MODO DE CÁLCULO</span>
+      <span class="ct-hint">Compliance cambió de metodología este período. Actívalo o desactívalo para ver el panorama operacional puro vs el completo.</span>
+    </div>
+    <div class="compliance-toggle-controls">
+      <button class="ct-btn active" data-mode="con" onclick="toggleCompliance('con')">
+        <span class="ct-btn-label">Con Compliance</span>
+        <span class="ct-btn-sub">Métrica completa</span>
+      </button>
+      <button class="ct-btn" data-mode="sin" onclick="toggleCompliance('sin')">
+        <span class="ct-btn-label">Sin Compliance</span>
+        <span class="ct-btn-sub">Solo operacional</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ SELECTOR DE EDIFICIOS ============ -->
+  <div class="building-selector" id="building-selector">
+    <span class="building-selector-label">Edificio</span>
+    <div class="building-pills" id="building-pills"></div>
+    <span class="building-portfolio-avg">Promedio portafolio<span class="num" id="portfolio-avg">—</span></span>
+  </div>
+
+  <!-- ============ VISTA POR EDIFICIO (las 3 secciones) ============ -->
+  <div id="vista-edificio">
+
+  <!-- ============ SECCIÓN 2 — ÚLTIMA AUDITORÍA ============ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">SECCIÓN 02</span>
+      <h2 class="section-title">Última auditoría <em>externa</em></h2>
+      <span class="section-aside" id="aristas-aside">6 aristas evaluadas</span>
+    </div>
+    <hr class="section-rule">
+
+    <!-- HERO -->
+    <div class="hero" id="hero"></div>
+
+    <!-- Legend + Compare strip -->
+    <div class="compare-strip">
+      <span class="label">Referencia comparativa</span>
+      <span>Tu edificio: <span class="num accent" id="cmp-me">—</span></span>
+      <span>Promedio otros edificios: <span class="num" id="cmp-others">—</span></span>
+      <span id="cmp-delta"></span>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--excellent)"></span>Excelente · ≥ 95%</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--good)"></span>Esperado · ≥ 90%</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--warn)"></span>Requiere atención · ≥ 85%</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--bad)"></span>Requiere intervención · &lt; 85%</div>
+      <div class="legend-item" style="margin-left:auto"><span style="width:2px;height:12px;background:var(--ink-dim);display:inline-block;margin-right:6px"></span>Promedio otros edificios</div>
+    </div>
+
+    <!-- 6 aristas -->
+    <div class="aristas-grid" id="aristas-grid"></div>
+
+    <!-- Drilldown placeholder -->
+    <div id="drilldown-container"></div>
+
+    <div class="nota">
+      <strong>Nota sobre la comparación</strong>
+      El "promedio otros edificios" se calcula de forma anonimizada con los datos del resto del portafolio cargado (actualmente: Brooklyn, IMU y Holley). Tu vista nunca expondrá nombres ni detalles específicos al cliente final; cada edificio solo ve su propio número y el promedio del resto. Cambiá el edificio activo con el selector de arriba.
+    </div>
+  </section>
+
+  <!-- ============ SECCIÓN 1 — EVOLUCIÓN HISTÓRICA ============ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">SECCIÓN 01</span>
+      <h2 class="section-title">Evolución <em>histórica</em></h2>
+      <span class="section-aside" id="hist-aside">—</span>
+    </div>
+    <hr class="section-rule">
+
+    <div class="bloque-titulo acento">Resultado general · serie histórica</div>
+    <div class="hist-note" id="hist-note"></div>
+    <div class="hist-chart-wrap">
+      <svg id="hist-chart" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="bloque-titulo acento" style="margin-top:36px">Detalle por dimensión</div>
+    <div class="hist-dims-grid" id="hist-dims-grid"></div>
+
+  </section>
+
+  <!-- ============ SECCIÓN 3 — PULSO INTERNO MENSUAL ============ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">SECCIÓN 03</span>
+      <h2 class="section-title">Pulso interno <em>mensual</em></h2>
+      <span class="section-aside" id="pulso-aside">—</span>
+    </div>
+    <hr class="section-rule">
+
+    <div class="bloque-titulo acento">Resultado global del edificio</div>
+    <div class="pulso-hero" id="pulso-hero"></div>
+
+    <div class="bloque-titulo acento" style="margin-top:36px">Desglose por pregunta</div>
+    <div class="pulso-questions" id="pulso-questions"></div>
+
+    <div class="nota">
+      <strong>Sobre el pulso interno</strong>
+      Son visitas breves del equipo LAR a cada edificio. Las notas se homologaron a escala 0–5: los registros anteriores (versión 1, escala 0–10) están divididos por 2 para que sean comparables con la versión vigente. Los comentarios de cada visita aparecen al expandir cada pregunta.
+    </div>
+  </section>
+
+  <!-- ============ SECCIÓN 04: PLAN DE ACCIÓN ============ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">SECCIÓN 04</span>
+      <h2 class="section-title">Plan de acción <em>Building Manager</em></h2>
+      <span class="section-aside" id="acc-aside">—</span>
+    </div>
+    <hr class="section-rule">
+
+    <div class="acc-intro">
+      <strong>Cómo leer este plan.</strong> Cada accionable nace de un hallazgo concreto de la auditoría de este edificio y está pensado para ser <strong>medible</strong> (con un KPI verificable), <strong>alcanzable</strong> (con un plazo realista) y <strong>priorizado</strong> según impacto en el puntaje y criticidad para el residente. Los plazos se cuentan desde la fecha de auditoría; alta prioridad requiere acción inmediata, media en el primer mes, baja en el ciclo del trimestre.
+    </div>
+
+    <div class="acc-summary" id="acc-summary"></div>
+
+    <div class="acc-filters" id="acc-filters"></div>
+
+    <div class="acc-list" id="acc-list"></div>
+
+    <div class="nota" style="margin-top:28px">
+      <strong>Cómo usar este plan en terreno</strong>
+      Cada accionable cierra cuando el KPI de cierre se cumple en una revisión semanal del BM con su equipo. El avance se reporta al Comité Operacional en el siguiente ciclo de auditoría: los accionables cerrados deberían reflejarse como mejoras visibles en el puntaje de la dimensión correspondiente. Si un accionable no cierra en su plazo, se escala con justificación documentada.
+    </div>
+  </section>
+
+  </div><!-- /vista-edificio -->
+
+  <!-- ============ VISTA PORTAFOLIO (comparativo) ============ -->
+  <div id="vista-portafolio" style="display:none">
+
+    <!-- Hero portafolio: promedio + ranking -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">RESUMEN</span>
+        <h2 class="section-title">Comparativo de <em>portafolio</em></h2>
+        <span class="section-aside">4 edificios · Abril–Mayo 2026</span>
+      </div>
+      <hr class="section-rule">
+
+      <!-- Promedio del portafolio actual vs anterior -->
+      <div id="ptf-summary"></div>
+
+      <div class="bloque-titulo acento" style="margin-top:32px">Resultado por edificio · Abril–Mayo 2026</div>
+      <div class="ptf-cards" id="ptf-cards"></div>
+    </section>
+
+    <!-- Tabla comparativa por arista -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">DETALLE</span>
+        <h2 class="section-title">Resultado por <em>dimensión</em></h2>
+        <span class="section-aside">Auditoría externa · Abril–Mayo 2026</span>
+      </div>
+      <hr class="section-rule">
+      <div class="ptf-table-wrap">
+        <table class="ptf-table" id="ptf-table"></table>
+      </div>
+      <div class="nota">
+        <strong>Cómo leer esta tabla</strong>
+        Cada celda muestra el % de la dimensión en abril. El color sigue el sistema semafórico (≥95% turquesa, ≥90% verde, ≥85% amarillo, &lt;85% rojo). El delta vs anterior se calcula contra la auditoría inmediatamente previa de cada edificio. <em>Compliance no es comparable</em> porque es una dimensión nueva con ítems que no se medían antes; por la misma razón, el delta del Total general se calcula excluyendo Compliance.
+      </div>
+    </section>
+
+    <!-- Evolución histórica: small multiples por edificio -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-num">EVOLUCIÓN</span>
+        <h2 class="section-title">Trayectoria <em>histórica por edificio</em></h2>
+        <span class="section-aside">Resultado general · meta 90%</span>
+      </div>
+      <hr class="section-rule">
+      <div class="ptf-multiples" id="ptf-multiples"></div>
+      <div class="nota">
+        <strong>Lectura</strong>
+        Cada panel muestra la evolución del resultado general de un edificio en sus auditorías históricas. La línea punteada turquesa marca la meta del 90% y el punto destacado al final corresponde a abril 2026. Cada edificio tiene su propio calendario de auditorías. Para mantener la comparabilidad de la serie, los promedios históricos no incluyen la dimensión Compliance.
+      </div>
+    </section>
+
+  </div><!-- /vista-portafolio -->
+
+  <footer class="footer">
+    <div class="footer-left">
+      <div id="footer-left">Multifamily Brooklyn · Auditoría Q2 2026</div>
+      <div style="margin-top:6px">Generado · 2026·05·12</div>
+    </div>
+    <div class="footer-logo-wrap">
+      <img id="footer-logo-img" alt="LAR GROUP" />
+    </div>
+  </footer>
+
+</div>
+
+<script>
+let ALL_BUILDINGS = {};
+let LAR_LOGO = "";
+let BUILDING_ORDER = [];
+let CURRENT_BUILDING = null;
+let DATA = null;
+
+function colorClass(pct) {
+  if (pct >= 0.95) return 'excellent';
+  if (pct >= 0.90) return 'good';
+  if (pct >= 0.85) return 'warn';
+  return 'bad';
+}
+function scoreColorClass(score, scaleMax) {
+  const pct = scaleMax === 1 ? score : score / 5;
+  if (pct >= 0.95) return 'excellent';
+  if (pct >= 0.90) return 'good';
+  if (pct >= 0.85) return 'warn';
+  return 'bad';
+}
+function categoryLabel(pct) {
+  if (pct >= 0.95) return 'Excelente';
+  if (pct >= 0.90) return 'Esperado';
+  if (pct >= 0.85) return 'Requiere atención';
+  return 'Requiere intervención';
+}
+function fmtPct(p) { return (p * 100).toFixed(1) + '%'; }
+function fmtNum(n) { return Number(n).toFixed(2); }
+function fmtFecha(iso) {
+  if (!iso) return '—';
+  const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const [y,m,d] = iso.split('-');
+  return `${parseInt(d)} / ${meses[parseInt(m)-1]} / ${y}`;
+}
+
+
+// ============ HEADER ============
+function renderHeader() {
+  const r = DATA.resumen;
+  document.getElementById('header-nombre').textContent = 'Multifamily ' + r.edificio;
+  document.getElementById('header-auditor').textContent = r.auditor;
+  document.getElementById('header-fecha').textContent = fmtFecha(r.fecha);
+  document.getElementById('footer-left').textContent = 'Multifamily ' + r.edificio + ' · Auditoría Q2 2026';
+  document.getElementById('footer-logo-img').src = LAR_LOGO;
+
+  // En vista portafolio mantener "Resumen Comité" + logo LAR; sólo actualizar en vista edificio.
+  if (typeof CURRENT_VIEW !== 'undefined' && CURRENT_VIEW === 'portafolio') {
+    const logoImg = document.getElementById('building-logo');
+    logoImg.src = LAR_LOGO;
+    logoImg.alt = 'LAR Group';
+    logoImg.style.display = '';
+    return;
+  }
+
+  const edEl = document.getElementById('header-edificio');
+  if (edEl) edEl.textContent = r.edificio;
+  const logoImg = document.getElementById('building-logo');
+  if (DATA.logo) { logoImg.src = DATA.logo; logoImg.alt = r.edificio; logoImg.style.display = ''; }
+  else logoImg.style.display = 'none';
+}
+
+// ============ BUILDING SELECTOR ============
+function renderBuildingSelector() {
+  const wrap = document.getElementById('building-pills');
+  wrap.innerHTML = '';
+  BUILDING_ORDER.forEach(name => {
+    const b = ALL_BUILDINGS[name];
+    const pct = (effectiveTotal(b) * 100).toFixed(1);
+    const btn = document.createElement('button');
+    btn.className = 'building-pill' + (name === CURRENT_BUILDING ? ' active' : '');
+    btn.innerHTML = `${name}<span class="pct">${pct}%</span>`;
+    btn.addEventListener('click', () => switchBuilding(name));
+    wrap.appendChild(btn);
+  });
+  const portAvg = BUILDING_ORDER.reduce((s,n) => s + effectiveTotal(ALL_BUILDINGS[n]), 0) / BUILDING_ORDER.length;
+  document.getElementById('portfolio-avg').textContent = (portAvg*100).toFixed(1) + '%';
+}
+
+function switchBuilding(name) {
+  if (name === CURRENT_BUILDING) return;
+  CURRENT_BUILDING = name;
+  DATA = ALL_BUILDINGS[name];
+  openIdx = null;
+  document.getElementById('drilldown-container').innerHTML = '';
+  renderAll();
+}
+
+function renderAll() {
+  renderHeader();
+  renderBuildingSelector();
+  renderHero();
+  renderAristas();
+  renderHistorico();
+  renderPulso();
+  renderAccionables();
+}
+
+// ============ HERO ============
+function renderHero(){
+  const tOrig = DATA.resumen.total;
+  const aristas = DATA.resumen.aristas;
+
+  // Calcular total efectivo según modo
+  let pct, nota, items_eval, pobt, pmax, items_total;
+  if (INCLUDE_COMPLIANCE) {
+    pct = tOrig.pct;
+    nota = tOrig.nota;
+    items_eval = tOrig.items_eval;
+    pobt = tOrig.pobt;
+    pmax = tOrig.pmax;
+    items_total = Math.round(items_eval/Math.max(tOrig.pct_eval, 0.01));
+  } else {
+    // Recalcular agregando solo las 5 dimensiones operacionales
+    const opAristas = aristas.filter(a => COMPARABLE_DIMS.includes(a.nombre));
+    pct = opAristas.reduce((s,a) => s + a.pct, 0) / opAristas.length;
+    pobt = opAristas.reduce((s,a) => s + a.pobt, 0);
+    pmax = opAristas.reduce((s,a) => s + a.pmax, 0);
+    nota = pobt / pmax * 5;
+    items_eval = opAristas.reduce((s,a) => s + a.items_eval, 0);
+    const items_eval_total = opAristas.reduce((s,a) => s + a.items_eval/Math.max(a.pct_eval, 0.01), 0);
+    items_total = Math.round(items_eval_total);
+  }
+  // Promedio de otros edificios bajo el mismo modo
+  const otherPcts = BUILDING_ORDER.filter(n => n !== CURRENT_BUILDING).map(n => effectiveTotal(ALL_BUILDINGS[n]));
+  const avgOtros = otherPcts.length ? otherPcts.reduce((a,b)=>a+b,0)/otherPcts.length : 0;
+
+  const cls = colorClass(pct);
+  const cat = categoryLabel(pct);
+  const delta = pct - avgOtros;
+  const deltaCls = delta > 0.01 ? 'up' : delta < -0.01 ? 'down' : 'flat';
+  const arrow = delta > 0.01 ? '▲' : delta < -0.01 ? '▼' : '◆';
+  const modoBadge = INCLUDE_COMPLIANCE ? '' : '<span style="display:inline-block;padding:3px 9px;background:var(--turquesa-50);color:var(--turquesa);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-radius:2px;margin-left:10px;vertical-align:middle">Sin Compliance</span>';
+
+  document.getElementById('hero').innerHTML = `
+    <div class="hero-main">
+      <div class="hero-eyebrow">Resultado global · Auditoría externa${modoBadge}</div>
+      <div class="hero-score-row">
+        <div class="hero-score ${cls}">${(pct*100).toFixed(1)}<span class="pct">%</span></div>
+        <span class="cat-label ${cls}">${cat}</span>
+      </div>
+      <div class="hero-label">Nota promedio ${fmtNum(nota)} / 5 · ${items_eval} ítems evaluados</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Puntaje</div>
+      <div class="hero-stat-value big-pct">${(pct*100).toFixed(1)}<span class="pct">%</span></div>
+      <div class="hero-stat-sub">${pobt} de ${pmax} pts · ${items_eval} de ${items_total} ítems</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Vs. otros edificios</div>
+      <div class="hero-stat-value">${(avgOtros*100).toFixed(1)}%
+        <span class="delta ${deltaCls}">${arrow} ${(delta*100).toFixed(1)} pts</span>
+      </div>
+      <div class="hero-stat-sub">Promedio anonimizado del portafolio</div>
+    </div>
+  `;
+
+  document.getElementById('cmp-me').textContent = (pct*100).toFixed(1) + '%';
+  document.getElementById('cmp-others').textContent = (avgOtros*100).toFixed(1) + '%';
+  const dEl = document.getElementById('cmp-delta');
+  dEl.innerHTML = `<span class="delta ${deltaCls}">${arrow} ${(delta*100).toFixed(1)} pts ${delta>0?'sobre':delta<0?'bajo':'='} el promedio</span>`;
+}
+
+// ============ ARISTAS CARDS ============
+function renderAristas(){
+  const grid = document.getElementById('aristas-grid');
+  grid.innerHTML = '';
+  DATA.resumen.aristas.forEach((a, idx) => {
+    // Filtrar Compliance si el modo lo excluye
+    if (!INCLUDE_COMPLIANCE && a.nombre === 'Compliance') return;
+    const cls = colorClass(a.pct);
+    const cat = categoryLabel(a.pct);
+    const diff = a.pct - a.avg_otros;
+    const diffCls = diff > 0.01 ? 'up' : diff < -0.01 ? 'down' : '';
+    const diffSym = diff > 0.01 ? '+' : '';
+    const markerLeft = Math.max(0, Math.min(100, a.avg_otros * 100));
+
+    const card = document.createElement('div');
+    card.className = 'arista-card';
+    card.dataset.idx = idx;
+    card.innerHTML = `
+      <div class="expand-hint">[ + ]</div>
+      <div class="arista-name">${a.nombre}</div>
+      <div class="arista-score">
+        <span class="arista-pct ${cls}">${(a.pct*100).toFixed(1)}</span>
+        <span class="arista-unit">%</span>
+      </div>
+      <div class="cat-label-sm ${cls}">${cat}</div>
+      <div class="arista-bar" style="margin-top:12px">
+        <div class="arista-bar-fill ${cls}" style="width:${(a.pct*100).toFixed(1)}%"></div>
+        <div class="arista-bar-marker" style="left:${markerLeft}%" title="Promedio otros edificios"></div>
+      </div>
+      <div class="arista-meta">
+        <span>Nota ${fmtNum(a.nota)} / 5</span>
+        <span>${a.items_eval} ítems</span>
+      </div>
+      <div class="arista-vs">vs otros: ${(a.avg_otros*100).toFixed(0)}% <span class="diff ${diffCls}">(${diffSym}${(diff*100).toFixed(1)} pts)</span></div>
+    `;
+    card.addEventListener('click', () => toggleDrill(idx));
+    grid.appendChild(card);
+  });
+  const aside = document.getElementById('aristas-aside');
+  if (aside) aside.textContent = INCLUDE_COMPLIANCE ? '6 aristas evaluadas' : '5 aristas · sin Compliance';
+}
+
+// ============ DRILLDOWN ============
+const ARISTA_DETAIL_MAP = {
+  0: { key: 'departamentos',   groupKey: 'section' },
+  1: { key: 'pasillos',        groupKey: 'group' },
+  2: { key: 'areas_comunes',   groupKey: 'area' },
+  3: { key: 'areas_servicio',  groupKey: 'area' },
+  4: { key: 'personal',        groupKey: 'area' },
+  5: { key: 'compliance',      groupKey: 'area' },
+};
+
+let openIdx = null;
+
+function toggleDrill(idx) {
+  document.querySelectorAll('.arista-card').forEach(c => c.classList.remove('open'));
+  const container = document.getElementById('drilldown-container');
+  if (openIdx === idx) {
+    container.innerHTML = '';
+    openIdx = null;
+    return;
+  }
+  openIdx = idx;
+  document.querySelector(`.arista-card[data-idx="${idx}"]`).classList.add('open');
+  const arista = DATA.resumen.aristas[idx];
+  const cfg = ARISTA_DETAIL_MAP[idx];
+
+  let items;
+  if (idx === 0) {
+    items = (DATA.departamentos && DATA.departamentos.items) ? DATA.departamentos.items.map(it => ({ group: it.section, name: it.item, score: it.avg, n: it.n })) : [];
+  } else {
+    const arr = DATA[cfg.key] || [];
+    items = arr.map(it => ({
+      group: it[cfg.groupKey],
+      name: it.item,
+      score: it.score !== undefined ? it.score : it.avg,
+      obs: it.obs,
+      n: it.n
+    }));
+  }
+
+  const groups = {};
+  const groupOrder = [];
+  items.forEach(it => {
+    if (!groups[it.group]) { groups[it.group] = []; groupOrder.push(it.group); }
+    groups[it.group].push(it);
+  });
+
+  let html = `
+    <div class="drilldown open">
+      <div class="drilldown-header">
+        <div class="drilldown-title"><em>${arista.nombre}</em> · detalle por área</div>
+        <button class="drilldown-close" onclick="toggleDrill(${idx})">cerrar ×</button>
+      </div>
+  `;
+
+  if (idx === 0 && DATA.departamentos && DATA.departamentos.auditados) {
+    html += `<div style="font-family:inherit;font-size:11px;color:var(--ink-dim);margin-bottom:18px;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">Departamentos auditados: <span style="color:var(--turquesa)">${DATA.departamentos.auditados.join(' · ')}</span></div>`;
+  }
+
+  groupOrder.forEach(g => {
+    const groupItems = groups[g];
+    const scaleMax = idx === 5 ? 1 : 5;
+    const avg = groupItems.reduce((s,i)=>s+i.score,0)/groupItems.length;
+    const avgDisplay = scaleMax === 1 ? (avg*100).toFixed(0) + '%' : fmtNum(avg) + ' / 5';
+    html += `
+      <div class="area-group">
+        <div class="area-header">
+          <span class="area-name">${g}</span>
+          <span class="area-avg">Promedio área &nbsp; <span class="num">${avgDisplay}</span></span>
+        </div>
+    `;
+    groupItems.forEach(it => {
+      const cls = scoreColorClass(it.score, scaleMax);
+      const pct = (it.score / scaleMax) * 100;
+      const displayScore = scaleMax === 1 ? (it.score * 100).toFixed(0) + '%' : fmtNum(it.score);
+      html += `
+        <div class="item-row">
+          <div class="item-name">${it.name}</div>
+          <div class="item-score ${cls}">${displayScore}</div>
+          <div class="item-bar"><div class="item-bar-fill ${cls}" style="width:${pct}%"></div></div>
+          ${it.obs ? `<div class="obs-row">${it.obs}</div>` : ''}
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  container.innerHTML = html;
+  setTimeout(() => container.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+}
+
+// ============ EVOLUCIÓN HISTÓRICA ============
+function renderHistorico() {
+  const h = DATA.historico;
+  const aside = document.getElementById('hist-aside');
+  const note = document.getElementById('hist-note');
+  const chart = document.getElementById('hist-chart');
+  const dimsGrid = document.getElementById('hist-dims-grid');
+
+  if (!h) {
+    aside.textContent = 'Sin datos';
+    chart.innerHTML = '';
+    dimsGrid.innerHTML = '<div class="placeholder"><strong>Sin histórico</strong>No se cargaron datos históricos para este edificio.</div>';
+    return;
+  }
+
+  const periods = h.periods;
+  const dimOrder = activeDims();
+
+  // Promedio general por período: media de las dimensiones activas
+  const generalSerie = periods.map((p, i) => {
+    const vals = dimOrder.map(d => (h.dims[d] || [])[i]).filter(v => v != null);
+    if (!vals.length) return null;
+    return vals.reduce((a,b)=>a+b, 0) / vals.length;
+  });
+
+  aside.textContent = `${periods.length} períodos · meta 90%${INCLUDE_COMPLIANCE ? '' : ' · sin Compliance'}`;
+  const last = generalSerie[generalSerie.length-1];
+  const first = generalSerie.find(v => v != null);
+  if (last != null && first != null && periods.length > 1) {
+    const diff = last - first;
+    const arrow = diff > 0.005 ? '↑' : diff < -0.005 ? '↓' : '→';
+    note.textContent = `Desde ${periods[0]} (${(first*100).toFixed(0)}%) hasta ${periods[periods.length-1]} (${(last*100).toFixed(0)}%) · ${arrow} ${diff>=0?'+':''}${(diff*100).toFixed(1)} pts`;
+  }
+
+  // ====== Chart general ======
+  const W = 900, H = 320;
+  const pad = { top: 30, right: 30, bottom: 50, left: 50 };
+  const innerW = W - pad.left - pad.right;
+  const innerH = H - pad.top - pad.bottom;
+  const xStep = periods.length > 1 ? innerW / (periods.length - 1) : 0;
+  const yScale = (v) => pad.top + innerH - (v - 0.4) / 0.6 * innerH;  // y axis 40% to 100%
+
+  let svg = '';
+  // Grid horizontal
+  [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0].forEach(v => {
+    const y = yScale(v);
+    svg += `<line x1="${pad.left}" y1="${y}" x2="${pad.left+innerW}" y2="${y}" stroke="${v===0.9?'#00A8B4':'#E1E2E4'}" stroke-width="${v===0.9?'1.5':'1'}" stroke-dasharray="${v===0.9?'5,3':'0'}"/>`;
+    svg += `<text x="${pad.left-10}" y="${y+4}" text-anchor="end" fill="#8E9092" font-size="10">${(v*100).toFixed(0)}%</text>`;
+  });
+  // Meta label
+  svg += `<text x="${pad.left+innerW}" y="${yScale(0.9)-6}" text-anchor="end" fill="#00A8B4" font-size="10" font-weight="700">META 90%</text>`;
+
+  // Línea general
+  const pts = generalSerie.map((v, i) => v != null ? {x: pad.left + i*xStep, y: yScale(v), v: v, label: periods[i]} : null).filter(p => p);
+  if (pts.length > 1) {
+    const path = pts.map((p,i) => (i===0?'M':'L') + p.x + ',' + p.y).join(' ');
+    svg += `<path d="${path}" fill="none" stroke="#00A8B4" stroke-width="2.5"/>`;
+  }
+  pts.forEach(p => {
+    const cls = colorClass(p.v);
+    const fill = cls === 'excellent' ? '#00A8B4' : cls === 'good' ? '#4CAF50' : cls === 'warn' ? '#E0B53C' : '#C84B4B';
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="${fill}" stroke="#fff" stroke-width="2"/>`;
+    svg += `<text x="${p.x}" y="${p.y-12}" text-anchor="middle" fill="${fill}" font-size="11" font-weight="700">${(p.v*100).toFixed(0)}%</text>`;
+  });
+  // X-axis labels
+  periods.forEach((p, i) => {
+    const x = pad.left + i*xStep;
+    svg += `<text x="${x}" y="${pad.top+innerH+20}" text-anchor="middle" fill="#747678" font-size="10.5">${p}</text>`;
+  });
+
+  chart.innerHTML = svg;
+
+  // ====== Sparkline por dimensión ======
+  let html = '';
+  dimOrder.forEach(d => {
+    const serie = h.dims[d] || [];
+    const current = serie[serie.length-1];
+    const cls = current != null ? colorClass(current) : 'bad';
+    const cat = current != null ? categoryLabel(current) : '—';
+    // mini chart
+    const w = 320, hgt = 70, p2 = {t:8,r:8,b:18,l:24};
+    const iw = w - p2.l - p2.r, ih = hgt - p2.t - p2.b;
+    const xs = serie.length > 1 ? iw / (serie.length-1) : 0;
+    const ys = v => p2.t + ih - (v - 0.4) / 0.6 * ih;
+    let s = '';
+    // meta line
+    s += `<line x1="${p2.l}" y1="${ys(0.9)}" x2="${p2.l+iw}" y2="${ys(0.9)}" stroke="#00A8B4" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>`;
+    const sp = serie.map((v,i) => v != null ? {x: p2.l+i*xs, y: ys(v), v} : null).filter(x => x);
+    if (sp.length > 1) {
+      s += `<path d="${sp.map((p,i)=>(i===0?'M':'L')+p.x+','+p.y).join(' ')}" fill="none" stroke="#747678" stroke-width="1.5"/>`;
+    }
+    sp.forEach((p, i) => {
+      const isLast = i === sp.length - 1;
+      const c = colorClass(p.v);
+      const fill = c === 'excellent' ? '#00A8B4' : c === 'good' ? '#4CAF50' : c === 'warn' ? '#E0B53C' : '#C84B4B';
+      s += `<circle cx="${p.x}" cy="${p.y}" r="${isLast?'4':'3'}" fill="${fill}" stroke="#fff" stroke-width="${isLast?'2':'1'}"/>`;
+    });
+    s += `<text x="${p2.l-4}" y="${ys(1)+3}" text-anchor="end" fill="#C8CACC" font-size="8">100</text>`;
+    s += `<text x="${p2.l-4}" y="${ys(0.4)+3}" text-anchor="end" fill="#C8CACC" font-size="8">40</text>`;
+
+    const lastLabel = periods[periods.length-1] || '';
+    html += `
+      <div class="hist-dim-card">
+        <div class="dim-title">${d}</div>
+        <div class="dim-current">Actual: <span class="num">${current != null ? (current*100).toFixed(0)+'%' : '—'}</span> · <span class="cat-label-sm ${cls}" style="margin:0;padding:2px 6px;font-size:9px">${cat}</span></div>
+        <svg viewBox="0 0 ${w} ${hgt}" preserveAspectRatio="xMidYMid meet">${s}</svg>
+        <div class="dim-meta"><span>${periods[0]}</span><span>${lastLabel}</span></div>
+      </div>
+    `;
+  });
+  dimsGrid.innerHTML = html;
+}
+
+// ============ PULSO INTERNO ============
+function renderPulso() {
+  const p = DATA.pulso;
+  const aside = document.getElementById('pulso-aside');
+  const hero = document.getElementById('pulso-hero');
+  const qs = document.getElementById('pulso-questions');
+
+  if (!p || !p.questions || !p.n_audits) {
+    aside.textContent = 'Sin auditorías';
+    hero.innerHTML = '<div class="pulso-empty"><strong>Sin pulso interno este mes</strong><br>Este edificio aún no recibe visitas internas del equipo LAR.</div>';
+    qs.innerHTML = '';
+    return;
+  }
+
+  aside.textContent = `${p.n_audits} visita${p.n_audits>1?'s':''} · escala 0–5`;
+
+  // Hero: global, mejor pregunta, peor pregunta
+  const gAvg = p.global_avg;
+  const gPct = gAvg / 5;
+  const gCls = scoreColorClass(gAvg, 5);
+  const gCat = categoryLabel(gPct);
+  const qValid = p.questions.filter(q => q.avg != null);
+  const best = qValid.reduce((a,b) => a.avg > b.avg ? a : b, qValid[0]);
+  const worst = qValid.reduce((a,b) => a.avg < b.avg ? a : b, qValid[0]);
+
+  hero.innerHTML = `
+    <div>
+      <div class="hero-stat-label">Nota global</div>
+      <div class="hero-stat-value big-pct ${gCls}">${fmtNum(gAvg)}<span class="pct">/5</span></div>
+      <div class="hero-stat-sub"><span class="cat-label-sm ${gCls}" style="margin-top:6px;display:inline-block">${gCat}</span></div>
+    </div>
+    <div>
+      <div class="hero-stat-label">Mejor evaluado</div>
+      <div class="hero-stat-value" style="font-size:18px;line-height:1.3;color:var(--good)">${best.label}</div>
+      <div class="hero-stat-sub">${fmtNum(best.avg)} / 5 · n=${best.n}</div>
+    </div>
+    <div>
+      <div class="hero-stat-label">Más bajo</div>
+      <div class="hero-stat-value" style="font-size:18px;line-height:1.3;color:var(--bad)">${worst.label}</div>
+      <div class="hero-stat-sub">${fmtNum(worst.avg)} / 5 · n=${worst.n}</div>
+    </div>
+  `;
+
+  // Lista de preguntas con comentarios expandibles
+  let html = '';
+  p.questions.forEach((q, i) => {
+    if (q.avg == null) return;
+    const cls = scoreColorClass(q.avg, 5);
+    const pct = (q.avg / 5) * 100;
+    html += `
+      <div class="pulso-question" data-q="${i}">
+        <div class="pulso-q-header" onclick="togglePulsoQ(${i})">
+          <div class="pulso-q-label">${q.label}</div>
+          <div class="pulso-q-score ${cls}">${fmtNum(q.avg)}<span class="max">/5</span></div>
+          <div class="pulso-q-bar"><div class="pulso-q-bar-fill ${cls}" style="width:${pct}%"></div></div>
+          <div class="pulso-q-toggle">${q.comments.length>0 ? '[ + ]' : ''}</div>
+        </div>
+        ${q.comments.length>0 ? `
+          <div class="pulso-q-body">
+            ${q.comments.map(c => `
+              <div class="pulso-comment">
+                <div class="pulso-comment-meta">
+                  ${c.auditor || 'Auditor'} · ${c.fecha ? fmtFecha(c.fecha) : ''}
+                  ${c.score != null ? `<span class="score-pill">${fmtNum(c.score)}/5</span>` : ''}
+                </div>
+                ${c.comment}
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  });
+  qs.innerHTML = html;
+}
+
+function togglePulsoQ(i) {
+  const el = document.querySelector(`.pulso-question[data-q="${i}"]`);
+  if (el && el.querySelector('.pulso-q-body')) el.classList.toggle('open');
+}
+
+// ============ TABS DE VISTA ============
+let CURRENT_VIEW = 'edificio';
+function switchView(view) {
+  if (view === CURRENT_VIEW) return;
+  CURRENT_VIEW = view;
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  document.getElementById('vista-edificio').style.display = view === 'edificio' ? '' : 'none';
+  document.getElementById('vista-portafolio').style.display = view === 'portafolio' ? '' : 'none';
+  document.getElementById('building-selector').style.display = view === 'edificio' ? '' : 'none';
+
+  // Header dinámico según la vista: en portafolio mostramos "Resumen Comité" + logo LAR
+  const h1 = document.getElementById('header-h1');
+  const logoImg = document.getElementById('building-logo');
+  if (view === 'portafolio') {
+    h1.innerHTML = '<em id="header-edificio">Resumen Comité</em>';
+    logoImg.src = LAR_LOGO;
+    logoImg.alt = 'LAR Group';
+    logoImg.style.display = '';
+  } else {
+    // Vista edificio: restaurar título y logo del edificio activo
+    h1.innerHTML = 'Auditoría <em id="header-edificio">' + DATA.resumen.edificio + '</em>';
+    if (DATA.logo) {
+      logoImg.src = DATA.logo;
+      logoImg.alt = DATA.resumen.edificio;
+      logoImg.style.display = '';
+    } else {
+      logoImg.style.display = 'none';
+    }
+  }
+
+  if (view === 'portafolio') renderPortafolio();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============ VISTA PORTAFOLIO ============
+const PTF_COLORS = { Brooklyn: '#00A8B4', IMU: '#E0772C', Holley: '#7B5BA6' };
+
+function renderPortafolio() {
+  renderPtfSummary();
+  renderPtfCards();
+  renderPtfTable();
+  renderPtfMultiples();
+}
+
+function renderPtfCards() {
+  const wrap = document.getElementById('ptf-cards');
+  const data = BUILDING_ORDER.map(name => ({
+    name,
+    b: ALL_BUILDINGS[name],
+    pct: effectiveTotal(ALL_BUILDINGS[name]),
+  }));
+  const sorted = [...data].sort((a, b) => b.pct - a.pct);
+  const ranks = {};
+  sorted.forEach((d, i) => ranks[d.name] = i + 1);
+
+  wrap.innerHTML = data.map(d => {
+    const t = d.b.resumen.total;
+    const aristas = d.b.resumen.aristas;
+    const cls = colorClass(d.pct);
+    const cat = categoryLabel(d.pct);
+    const rank = ranks[d.name];
+    const rankCls = rank === 1 ? 'first' : '';
+    const rankLabel = rank === 1 ? '1.º LUGAR' : rank === 2 ? '2.º LUGAR' : '3.º LUGAR';
+
+    // Puntos y nota efectivos según modo
+    let effPobt, effPmax, effNota;
+    if (INCLUDE_COMPLIANCE) {
+      effPobt = t.pobt; effPmax = t.pmax; effNota = t.nota;
+    } else {
+      const opAr = aristas.filter(a => COMPARABLE_DIMS.includes(a.nombre));
+      effPobt = opAr.reduce((s,a) => s+a.pobt, 0);
+      effPmax = opAr.reduce((s,a) => s+a.pmax, 0);
+      effNota = effPobt / effPmax * 5;
+    }
+
+    // Serie histórica para sparkline según modo activo
+    const h = d.b.historico;
+    const serie = h ? totalSerieEffective(h).values : [];
+
+    const validSerie = serie.filter(v => v != null);
+    const trendArrow = validSerie.length > 1 ?
+      (validSerie[validSerie.length-1] > validSerie[validSerie.length-2] ? '▲' :
+       validSerie[validSerie.length-1] < validSerie[validSerie.length-2] ? '▼' : '◆') : '◆';
+    const trendCls = validSerie.length > 1 ?
+      (validSerie[validSerie.length-1] > validSerie[validSerie.length-2] ? 'up' :
+       validSerie[validSerie.length-1] < validSerie[validSerie.length-2] ? 'down' : 'flat') : 'flat';
+    const trendDelta = validSerie.length > 1 ?
+      (validSerie[validSerie.length-1] - validSerie[validSerie.length-2]) * 100 : 0;
+
+    // Mini sparkline
+    let mini = '';
+    if (serie.length > 1) {
+      const w = 280, hgt = 50, p = {t:6, r:4, b:6, l:4};
+      const iw = w - p.l - p.r, ih = hgt - p.t - p.b;
+      const xs = iw / (serie.length - 1);
+      const ys = v => p.t + ih - (v - 0.5) / 0.5 * ih;
+      mini += `<line x1="${p.l}" y1="${ys(0.9)}" x2="${p.l+iw}" y2="${ys(0.9)}" stroke="#00A8B4" stroke-width="1" stroke-dasharray="3,2" opacity="0.4"/>`;
+      const pts = serie.map((v, i) => v != null ? {x: p.l + i*xs, y: ys(v), v} : null).filter(x => x);
+      if (pts.length > 1) {
+        const path = pts.map((pp,i) => (i===0?'M':'L') + pp.x + ',' + pp.y).join(' ');
+        const col = PTF_COLORS[d.name];
+        mini += `<path d="${path}" fill="none" stroke="${col}" stroke-width="2"/>`;
+        pts.forEach((pp, i) => {
+          const isLast = i === pts.length - 1;
+          mini += `<circle cx="${pp.x}" cy="${pp.y}" r="${isLast?4:2.5}" fill="${col}" stroke="#fff" stroke-width="${isLast?2:1}"/>`;
+        });
+      }
+    }
+
+    return `
+      <div class="ptf-card" onclick="goToBuilding('${d.name}')">
+        <div class="ptf-card-rank ${rankCls}">${rankLabel}</div>
+        <div class="ptf-card-head">
+          <img class="ptf-card-logo" src="${d.b.logo || ''}" alt="${d.name}">
+          <div>
+            <div class="ptf-card-name">${d.name}</div>
+            <div class="ptf-card-meta">${fmtFecha(d.b.resumen.fecha)}</div>
+          </div>
+        </div>
+        <div class="ptf-card-score-row">
+          <div class="ptf-card-score ${cls}">${(d.pct*100).toFixed(1)}<span class="pct">%</span></div>
+          <span class="cat-label-sm ${cls}" style="margin:0">${cat}</span>
+        </div>
+        <div style="font-size:12px;color:var(--gris-500);margin-top:4px">${effPobt} / ${effPmax} pts · Nota ${fmtNum(effNota)} / 5</div>
+        <div class="ptf-card-mini">
+          ${mini ? `<svg viewBox="0 0 280 50" preserveAspectRatio="xMidYMid meet">${mini}</svg>` : ''}
+        </div>
+        <div class="ptf-card-trend">
+          ${validSerie.length > 1 ? `<span class="arrow ${trendCls}">${trendArrow}</span> ${trendDelta>=0?'+':''}${trendDelta.toFixed(1)} pts vs período anterior` : 'Primer período registrado'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function goToBuilding(name) {
+  switchView('edificio');
+  if (name !== CURRENT_BUILDING) switchBuilding(name);
+}
+
+function renderPtfTable() {
+  const table = document.getElementById('ptf-table');
+  const dimOrder = activeDims();
+
+  // Header
+  let html = `
+    <thead>
+      <tr>
+        <th>Dimensión</th>
+        ${BUILDING_ORDER.map(n => `<th class="col-build">${n}</th>`).join('')}
+        <th>Δ vs anterior · Brooklyn</th>
+        <th>Δ vs anterior · IMU</th>
+        <th>Δ vs anterior · Holley</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+
+  // Por cada dimensión
+  dimOrder.forEach(dim => {
+    html += `<tr><td class="dim-cell">${dim}</td>`;
+    BUILDING_ORDER.forEach(n => {
+      const ar = ALL_BUILDINGS[n].resumen.aristas.find(a => a.nombre === dim);
+      if (!ar) {
+        html += `<td class="ptf-cell">—</td>`;
+      } else {
+        const cls = colorClass(ar.pct);
+        html += `<td class="ptf-cell"><span class="ptf-cell-pct ${cls}">${(ar.pct*100).toFixed(1)}%</span></td>`;
+      }
+    });
+    // Deltas vs período anterior
+    BUILDING_ORDER.forEach(n => {
+      // Compliance no es comparable: la metodología cambió este período
+      if (dim === 'Compliance') {
+        html += `<td class="ptf-cell"><span style="color:var(--gris-500);font-size:10.5px;font-style:italic">no comparable</span></td>`;
+        return;
+      }
+      const h = ALL_BUILDINGS[n].historico;
+      if (!h || !h.dims[dim]) {
+        html += `<td class="ptf-cell">—</td>`;
+      } else {
+        const serie = h.dims[dim];
+        const last = serie[serie.length-1];
+        const prev = serie.slice(0, -1).reverse().find(v => v != null);
+        if (last == null || prev == null) {
+          html += `<td class="ptf-cell"><span style="color:var(--gris-500);font-size:11px">sin previo</span></td>`;
+        } else {
+          const diff = (last - prev) * 100;
+          const dCls = diff > 0.5 ? 'up' : diff < -0.5 ? 'down' : '';
+          const arrow = diff > 0.5 ? '▲' : diff < -0.5 ? '▼' : '◆';
+          html += `<td class="ptf-cell"><span class="ptf-cell-delta ${dCls}" style="font-size:12px">${arrow} ${diff>=0?'+':''}${diff.toFixed(1)} pts</span></td>`;
+        }
+      }
+    });
+    html += `</tr>`;
+  });
+
+  // Fila total
+  html += `<tr class="row-total"><td class="dim-cell">Total general</td>`;
+  BUILDING_ORDER.forEach(n => {
+    const effPct = effectiveTotal(ALL_BUILDINGS[n]);
+    const cls = colorClass(effPct);
+    html += `<td class="ptf-cell"><span class="ptf-cell-pct ${cls}">${(effPct*100).toFixed(1)}%</span></td>`;
+  });
+  // Deltas total — excluyendo Compliance para que sea comparable con el período anterior
+  BUILDING_ORDER.forEach(n => {
+    const h = ALL_BUILDINGS[n].historico;
+    // Sin Compliance, porque antes no se medía con la misma metodología
+    const dimsComparable = ['Departamentos Vacantes','Pasillos Departamentos','Áreas Comunes Amenities','Áreas de Servicio','Personal'];
+    if (!h) { html += `<td class="ptf-cell">—</td>`; return; }
+    const totalSerie = h.periods.map((p, i) => {
+      const vals = dimsComparable.map(d => (h.dims[d] || [])[i]).filter(v => v != null);
+      return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+    });
+    const last = totalSerie[totalSerie.length-1];
+    const prev = totalSerie.slice(0, -1).reverse().find(v => v != null);
+    if (last == null || prev == null) {
+      html += `<td class="ptf-cell"><span style="color:var(--gris-500);font-size:11px">sin previo</span></td>`;
+    } else {
+      const diff = (last - prev) * 100;
+      const dCls = diff > 0.5 ? 'up' : diff < -0.5 ? 'down' : '';
+      const arrow = diff > 0.5 ? '▲' : diff < -0.5 ? '▼' : '◆';
+      html += `<td class="ptf-cell"><span class="ptf-cell-delta ${dCls}" style="font-size:12px;font-weight:700">${arrow} ${diff>=0?'+':''}${diff.toFixed(1)} pts</span></td>`;
+    }
+  });
+  html += `</tr></tbody>`;
+
+  table.innerHTML = html;
+}
+
+// Dimensiones comparables (sin Compliance, que cambió de metodología)
+const COMPARABLE_DIMS = ['Departamentos Vacantes','Pasillos Departamentos','Áreas Comunes Amenities','Áreas de Servicio','Personal'];
+const ALL_DIMS = ['Departamentos Vacantes','Pasillos Departamentos','Áreas Comunes Amenities','Áreas de Servicio','Personal','Compliance'];
+
+// Modo de cálculo: incluir o no la dimensión Compliance
+let INCLUDE_COMPLIANCE = true;
+
+function activeDims() { return INCLUDE_COMPLIANCE ? ALL_DIMS : COMPARABLE_DIMS; }
+
+// Total efectivo de un edificio según el modo activo
+function effectiveTotal(building) {
+  const aristas = building.resumen.aristas;
+  if (INCLUDE_COMPLIANCE) {
+    return building.resumen.total.pct;
+  }
+  const vals = COMPARABLE_DIMS.map(d => {
+    const ar = aristas.find(a => a.nombre === d);
+    return ar ? ar.pct : null;
+  }).filter(v => v != null);
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+}
+
+function toggleCompliance(mode) {
+  const newVal = mode === 'con';
+  if (newVal === INCLUDE_COMPLIANCE) return;
+  INCLUDE_COMPLIANCE = newVal;
+  document.querySelectorAll('.ct-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  // Re-renderiza todo
+  renderAll();
+  if (CURRENT_VIEW === 'portafolio') renderPortafolio();
+}
+
+// Calcula la serie histórica del total general de un edificio, EXCLUYENDO Compliance
+function totalSerieSinCompliance(historico) {
+  if (!historico) return { periods: [], values: [] };
+  const values = historico.periods.map((p, i) => {
+    const vals = COMPARABLE_DIMS.map(d => (historico.dims[d] || [])[i]).filter(v => v != null);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  });
+  return { periods: historico.periods, values };
+}
+
+// Serie histórica del total general según el modo activo
+function totalSerieEffective(historico) {
+  if (!historico) return { periods: [], values: [] };
+  const dims = activeDims();
+  const values = historico.periods.map((p, i) => {
+    const vals = dims.map(d => (historico.dims[d] || [])[i]).filter(v => v != null);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  });
+  return { periods: historico.periods, values };
+}
+
+function renderPtfSummary() {
+  const wrap = document.getElementById('ptf-summary');
+
+  // Promedio actual del portafolio: respeta el toggle (con/sin Compliance)
+  const totalsActual = BUILDING_ORDER.map(n => effectiveTotal(ALL_BUILDINGS[n])).filter(v => v != null);
+  const avgActual = totalsActual.length ? totalsActual.reduce((a,b)=>a+b,0)/totalsActual.length : null;
+
+  // Promedio actual SIN Compliance: usado siempre para la comparación con período anterior
+  const totalsActualSinComp = BUILDING_ORDER.map(n => {
+    const aristas = ALL_BUILDINGS[n].resumen.aristas;
+    const vals = COMPARABLE_DIMS.map(d => {
+      const ar = aristas.find(a => a.nombre === d);
+      return ar ? ar.pct : null;
+    }).filter(v => v != null);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  }).filter(v => v != null);
+  const avgActualSinComp = totalsActualSinComp.length ? totalsActualSinComp.reduce((a,b)=>a+b,0)/totalsActualSinComp.length : null;
+
+  // Promedio anterior: media del valor previo de cada edificio (siempre sin Compliance)
+  const prevList = BUILDING_ORDER.map(n => {
+    const { values } = totalSerieSinCompliance(ALL_BUILDINGS[n].historico);
+    if (values.length < 2) return null;
+    const prev = values.slice(0, -1).reverse().find(v => v != null);
+    return prev;
+  }).filter(v => v != null);
+  const avgPrev = prevList.length ? prevList.reduce((a,b)=>a+b,0)/prevList.length : null;
+
+  const nActual = totalsActual.length;
+  const nPrev = prevList.length;
+
+  const clsActual = avgActual != null ? colorClass(avgActual) : '';
+  const catActual = avgActual != null ? categoryLabel(avgActual) : '—';
+
+  // La variación vs anterior siempre se calcula sin Compliance (única base comparable)
+  let deltaHTML = '';
+  if (avgActualSinComp != null && avgPrev != null) {
+    const diff = (avgActualSinComp - avgPrev) * 100;
+    const dCls = diff > 0.5 ? 'up' : diff < -0.5 ? 'down' : 'flat';
+    const arrow = diff > 0.5 ? '▲' : diff < -0.5 ? '▼' : '◆';
+    deltaHTML = `<div class="ptf-summary-delta-big ${dCls}">${arrow} ${diff>=0?'+':''}${diff.toFixed(1)} pts</div>`;
+  } else {
+    deltaHTML = `<div class="ptf-summary-delta-big flat" style="font-size:14px">sin base comparable</div>`;
+  }
+
+  const modoLabel = INCLUDE_COMPLIANCE ? 'con Compliance' : 'sin Compliance';
+
+  wrap.innerHTML = `
+    <div class="ptf-summary-wrap">
+      <div class="ptf-summary-block">
+        <div class="ptf-summary-eyebrow">Promedio del portafolio · Abril–Mayo 2026</div>
+        <div class="ptf-summary-row">
+          <div class="ptf-summary-big ${clsActual}">${avgActual != null ? (avgActual*100).toFixed(1) : '—'}<span class="pct">%</span></div>
+          ${avgActual != null ? `<span class="cat-label ${clsActual}">${catActual}</span>` : ''}
+        </div>
+        <div class="ptf-summary-sub">Media simple de ${nActual} edificio${nActual!==1?'s':''} · ${modoLabel} (responde al selector de arriba)</div>
+      </div>
+      <div class="ptf-summary-block">
+        <div class="ptf-summary-eyebrow">Auditoría anterior</div>
+        <div class="ptf-summary-prev">${avgPrev != null ? (avgPrev*100).toFixed(1) : '—'}<span class="pct">%</span></div>
+        <div class="ptf-summary-sub">Promedio del período inmediatamente previo de cada edificio${nPrev < nActual ? ' · '+nPrev+' con histórico' : ''}</div>
+      </div>
+      <div class="ptf-summary-block">
+        <div class="ptf-summary-eyebrow">Variación vs anterior</div>
+        ${deltaHTML}
+        <div class="ptf-summary-sub">Calculada siempre sin Compliance ${INCLUDE_COMPLIANCE ? '(actual '+(avgActualSinComp*100).toFixed(1)+'% sin Compliance vs '+(avgPrev*100).toFixed(1)+'% anterior) ' : ''}porque es una dimensión nueva sin histórico comparable</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPtfMultiples() {
+  const wrap = document.getElementById('ptf-multiples');
+
+  let html = '';
+  BUILDING_ORDER.forEach(n => {
+    const b = ALL_BUILDINGS[n];
+    const h = b.historico;
+    const { periods, values } = totalSerieEffective(h);
+    const current = values.length ? values[values.length-1] : null;
+    const cls = current != null ? colorClass(current) : 'bad';
+    const cat = current != null ? categoryLabel(current) : '—';
+
+    const W = 320, H = 110, pad = {t: 14, r: 14, b: 24, l: 28};
+    const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+    const xStep = values.length > 1 ? iw / (values.length - 1) : 0;
+    const ys = v => pad.t + ih - (v - 0.4) / 0.6 * ih;
+
+    let svg = '';
+    // Grid sutil
+    [0.5, 0.7, 0.9].forEach(v => {
+      const y = ys(v);
+      svg += `<line x1="${pad.l}" y1="${y}" x2="${pad.l+iw}" y2="${y}" stroke="${v===0.9?'#00A8B4':'#E1E2E4'}" stroke-width="${v===0.9?'1':'0.5'}" stroke-dasharray="${v===0.9?'3,2':'0'}" opacity="${v===0.9?'0.6':'0.5'}"/>`;
+    });
+    // Etiquetas eje Y mínimas
+    svg += `<text x="${pad.l-4}" y="${ys(0.9)+3}" text-anchor="end" fill="#00A8B4" font-size="8" font-weight="600">90</text>`;
+    svg += `<text x="${pad.l-4}" y="${ys(0.5)+3}" text-anchor="end" fill="#C8CACC" font-size="8">50</text>`;
+
+    // Línea
+    const pts = values.map((v, i) => v != null ? {x: pad.l + i*xStep, y: ys(v), v, label: periods[i], isLast: i === values.length-1} : null).filter(p => p);
+    if (pts.length > 1) {
+      const path = pts.map((p,i) => (i===0?'M':'L') + p.x + ',' + p.y).join(' ');
+      svg += `<path d="${path}" fill="none" stroke="#747678" stroke-width="2" opacity="0.8"/>`;
+    }
+    pts.forEach((p) => {
+      const c = colorClass(p.v);
+      const fill = c === 'excellent' ? '#00A8B4' : c === 'good' ? '#4CAF50' : c === 'warn' ? '#E0B53C' : '#C84B4B';
+      if (p.isLast) {
+        // Halo + punto grande + label
+        svg += `<circle cx="${p.x}" cy="${p.y}" r="9" fill="${fill}" opacity="0.18"/>`;
+        svg += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="${fill}" stroke="#fff" stroke-width="2"/>`;
+        svg += `<text x="${p.x}" y="${p.y-12}" text-anchor="middle" fill="${fill}" font-size="11" font-weight="700">${(p.v*100).toFixed(0)}%</text>`;
+      } else {
+        svg += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="${fill}" stroke="#fff" stroke-width="1"/>`;
+      }
+    });
+
+    // X-axis: primer y último período (para no saturar)
+    if (pts.length) {
+      const first = pts[0], last = pts[pts.length-1];
+      svg += `<text x="${first.x}" y="${pad.t+ih+14}" text-anchor="middle" fill="#747678" font-size="9">${first.label}</text>`;
+      if (pts.length > 1) {
+        svg += `<text x="${last.x}" y="${pad.t+ih+14}" text-anchor="middle" fill="#00A8B4" font-size="9" font-weight="700">${last.label}</text>`;
+      }
+    }
+
+    html += `
+      <div class="ptf-mult-card" onclick="goToBuilding('${n}')">
+        <div class="ptf-mult-head">
+          <div class="ptf-mult-name">${n}</div>
+          <div class="ptf-mult-current ${cls}">${current != null ? (current*100).toFixed(1)+'%' : '—'}</div>
+        </div>
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${svg}</svg>
+        <div class="ptf-mult-foot">
+          <span>${values.length} período${values.length!==1?'s':''}</span>
+          <span><span class="cat-label-sm ${cls}" style="margin:0;padding:2px 6px;font-size:8.5px">${cat}</span></span>
+        </div>
+      </div>
+    `;
+  });
+
+  wrap.innerHTML = html;
+}
+
+// ============ PLAN DE ACCIÓN ============
+// Accionables por edificio. Cada uno nace de un hallazgo real de la auditoría.
+// Estructura: { id, prio (alta|media|baja), dim, titulo, hallazgo, accion[], kpi_cierre, kpi_seguimiento, plazo_dias, responsable }
+const ACCIONABLES = {
+  'Brooklyn': [
+    {
+      prio: 'alta', dim: 'Áreas de Servicio', plazo: 7, responsable: 'BM + Jefe Aseo',
+      titulo: 'Recuperar zona de reciclaje y Sala e-comerce Norte',
+      hallazgo: 'Zona reciclaje con puntaje 1.0/5 (acceso sucio, puerta sucia). Sala e-comerce Norte con piso y muros en 1.0/5. Sala Basura Norte (segunda evaluación) baja a 3.0/5 con piso en 2.0/5.',
+      accion: [
+        'Aseo profundo (lavado a fondo de pisos, muros y puertas) en zona reciclaje, Sala e-comerce Norte y Sala Basura Norte.',
+        'Asignar responsable rotativo diario para revisión visual de estas tres áreas.',
+        'Instalar lista de chequeo visible en cada zona con firma de turno.'
+      ],
+      kpi_cierre: 'Las 3 áreas alcanzan ≥ 4.0/5 en re-inspección a los 7 días.',
+      kpi_seg: 'Inspección diaria del BM durante la primera semana; semanal a partir de la segunda.'
+    },
+    {
+      prio: 'alta', dim: 'Áreas Comunes Amenities', plazo: 14, responsable: 'BM + Mantención',
+      titulo: 'Reparar o reemplazar TVs de gimnasios (4 unidades en 1.0/5)',
+      hallazgo: 'Las 4 TVs de los gimnasios (Máquinas Norte, Cardio Norte, Máquinas Sur, Cardio Sur) tienen score 1.0/5: inoperativas o en muy mal estado.',
+      accion: [
+        'Diagnóstico técnico de cada TV: definir si se repara o se reemplaza.',
+        'Cotizar reemplazo en caso de daño irreparable y elevar solicitud de compra.',
+        'Hasta tener solución definitiva, retirar las TVs no funcionales para no transmitir abandono.'
+      ],
+      kpi_cierre: 'Las 4 TVs operativas o retiradas con plan formal de reposición a 30 días.',
+      kpi_seg: 'Reporte semanal al Comité con avance de cotización/instalación.'
+    },
+    {
+      prio: 'alta', dim: 'Pasillos Departamentos', plazo: 10, responsable: 'BM + Aseo',
+      titulo: 'Aseo profundo de caja escala/shaft y reposición de vidrios pasillos',
+      hallazgo: 'Aseo y filtraciones caja escala y shaft con 1.0/5. Vidrios ventanas pasillo en 1.0/5. Iluminación pasillos y orden/aseo del piso en 3.33/5.',
+      accion: [
+        'Aseo profundo de caja escala y shaft con productos adecuados; revisar filtraciones y derivar a mantención si las hay.',
+        'Inventariar y reponer/limpiar vidrios quebrados de ventanas de pasillos.',
+        'Revisión y cambio de ampolletas en pasillos según mapa de iluminación.'
+      ],
+      kpi_cierre: 'Caja escala, shaft, vidrios e iluminación de pasillos ≥ 4.0/5 en re-inspección.',
+      kpi_seg: 'Recorrido semanal del BM con check-list firmado por turno.'
+    },
+    {
+      prio: 'alta', dim: 'Compliance', plazo: 30, responsable: 'BM + RRHH',
+      titulo: 'Cerrar brechas críticas de certificación de personal',
+      hallazgo: 'Compliance en 71.4%. Curso Rescate Ascensores en 0/1 (certificados ya no trabajan en el edificio, pactado para mayo). Curso Calderas en 0/1 (sin fecha). Mangueras de incendio sin fecha de vencimiento (0/1).',
+      accion: [
+        'Ejecutar el curso de Rescate de Ascensores ya pactado para mayo: confirmar fecha, personal asignado y verificar certificación al término.',
+        'Agendar curso de Calderas para personal de Mantención antes del próximo ciclo de auditoría.',
+        'Coordinar con proveedor para que actualice fecha de vencimiento visible en cada manguera de incendio.'
+      ],
+      kpi_cierre: 'Certificaciones Rescate Ascensores y Calderas vigentes (al menos 1 persona certificada en cada una). Mangueras con fecha visible en 100%.',
+      kpi_seg: 'Registro fotográfico de certificados y mangueras al Comité del próximo mes.'
+    },
+    {
+      prio: 'media', dim: 'Áreas Comunes Amenities', plazo: 21, responsable: 'BM + Aseo',
+      titulo: 'Plan de recuperación de salones de eventos (Dumbo, Loft, Nest, Nook, Salón Prospect)',
+      hallazgo: 'Dumbo Party 3.17/5, Loft Party 3.17/5, Nook Lounge 2.6/5, Nest Lounge 3.5/5, Salón Prospect 3.0/5. Problema transversal: vidrios y cortinas en 2.0/5, muros y pisos en 2-3/5.',
+      accion: [
+        'Aseo profundo de los 5 salones: vidrios, cortinas, muros y pisos.',
+        'Diagnóstico de cortinas: limpieza profunda o reposición según estado.',
+        'Programa de mantención preventiva mensual para estos espacios con check-list específico.'
+      ],
+      kpi_cierre: 'Los 5 salones alcanzan ≥ 4.0/5 promedio en re-inspección.',
+      kpi_seg: 'Revisión quincenal del BM hasta cierre.'
+    },
+    {
+      prio: 'media', dim: 'Áreas Comunes Amenities', plazo: 21, responsable: 'BM + Mantención',
+      titulo: 'Mejoras transversales en ascensores y halls',
+      hallazgo: 'Cabinas de ascensores Norte y Sur con score 3.0/5 (estado general). Puertas ascensores en 3.0/5 en varias áreas. Música operativa en Hall Acceso Norte en 1.0/5.',
+      accion: [
+        'Limpieza profunda de cabinas de ascensores y mantención correctiva donde aplique.',
+        'Reparar sistema de música del Hall de Acceso Norte (foco también del pulso interno).',
+        'Aseo fino diario de rieles y puertas de ascensores.'
+      ],
+      kpi_cierre: 'Ascensores ≥ 4.0/5 y música del Hall operativa permanente.',
+      kpi_seg: 'Inspección semanal del BM; medición de música activa en todos los recorridos diarios.'
+    },
+    {
+      prio: 'media', dim: 'Pulso Interno', plazo: 30, responsable: 'BM + Guest Service',
+      titulo: 'Capacitación y consolidación del equipo Guest Service',
+      hallazgo: 'Pulso Guest Service 3.5/5 en promedio. Visitas registran: "falta mucha capacitación", "atareados al ser solo uno por turno", aunque la última visita reporta mejoría ("ha mejorado bastante el equipo").',
+      accion: [
+        'Programa de capacitación de 4 sesiones (procedimientos, manejo de incidencias, protocolo de emergencias, atención al residente).',
+        'Definir y publicar respaldo operativo en horarios de alta carga (1 persona por turno es insuficiente cuando hay incidencias).',
+        'Revisar uniformes y reposición para Guest Service y Mantención (pulso reporta brecha persistente).'
+      ],
+      kpi_cierre: 'Guest Service alcanza ≥ 4.0/5 en pulso interno del mes siguiente. 100% del personal con uniforme.',
+      kpi_seg: 'Asistencia firmada a las 4 sesiones; revisión visual diaria del uniforme.'
+    },
+    {
+      prio: 'media', dim: 'Departamentos Vacantes', plazo: 14, responsable: 'BM + Aseo',
+      titulo: 'Refuerzo del estándar de departamento vacante',
+      hallazgo: 'Luces departamento en 3.25/5 (4 unidades). Puertas Closet/repisas/muros interiores en 3.0/5. Espejo baño en 3.5/5. Piso terraza en 3.75/5. Pulso interno reporta "deptos vacíos sucios" (Daniela Jensen, abril 1).',
+      accion: [
+        'Check-list de entrega de departamento vacante de 25 puntos firmado por Aseo y validado por BM antes de mostrar la unidad.',
+        'Reposición/reparación de luminarias defectuosas (revisión de las 4 unidades auditadas y barrido por torre).',
+        'Aseo profundo programado para clósets y terrazas en cada rotación.'
+      ],
+      kpi_cierre: 'Próxima muestra de 4 departamentos vacantes con promedio ≥ 4.5/5 y sin ítem por debajo de 4.0.',
+      kpi_seg: 'Auditoría interna semanal de 1 departamento vacante al azar.'
+    },
+    {
+      prio: 'baja', dim: 'Áreas Comunes Amenities', plazo: 45, responsable: 'BM + Proveedor jardines',
+      titulo: 'Plan paisajístico para quinchos y piscina',
+      hallazgo: 'Quinchos (The Grill, Smokey, Quincho 3, Ember) en 3.5–4.0/5 promedio. Jardineras con score 3.0/5 (sin colillas, plantas en buen estado, riego operativo). Piscina con reposeras y ducha lavapies en 3.0/5.',
+      accion: [
+        'Revisión integral del estado de plantas, riego y jardineras de los 4 quinchos con el proveedor de jardines.',
+        'Recambio de reposeras y mantención del lavapies de la piscina.',
+        'Recorrido conjunto BM + proveedor para definir ciclos de mantención.'
+      ],
+      kpi_cierre: 'Quinchos ≥ 4.0/5 promedio; piscina con reposeras y lavapies ≥ 4.0/5.',
+      kpi_seg: 'Visita mensual del proveedor con reporte fotográfico.'
+    }
+  ],
+  'IMU': [
+    {
+      prio: 'alta', dim: 'Compliance', plazo: 60, responsable: 'BM + RRHH',
+      titulo: 'Plan integral de certificaciones del equipo',
+      hallazgo: 'Compliance en 68.75%. Cursos de Extintores, Trabajos en Altura, Rescate Ascensores y Plan de Emergencia en 0/1. BM con curso hecho pero sin inscripción MINVU. Ascensores con mantención al día pero sin certificación.',
+      accion: [
+        'Inscribir al BM en el Registro Nacional de Administradores de Condominios (MINVU).',
+        'Coordinar curso de Uso y Manejo de Extintores para todo el personal.',
+        'Agendar Curso de Trabajos en Altura y Rescate de Ascensores (mínimo 2 personas certificadas).',
+        'Elaborar y publicar el Plan de Emergencia del edificio.',
+        'Gestionar certificación de ascensores con el proveedor de mantención.'
+      ],
+      kpi_cierre: 'Compliance pasa de 68.75% a ≥ 90% en próxima auditoría (cierre de al menos 5 de los 7 ítems en 0).',
+      kpi_seg: 'Reporte mensual al Comité con evidencia de cada certificación.'
+    },
+    {
+      prio: 'alta', dim: 'Áreas Comunes Amenities', plazo: 21, responsable: 'BM + Mantención',
+      titulo: 'Resolver filtración de piscina',
+      hallazgo: 'Piscina con "sin filtraciones" en 1.0/5. Reposeras y jardineras en 3.0/5.',
+      accion: [
+        'Diagnóstico técnico inmediato de la filtración con empresa especialista.',
+        'Cotización y plan de reparación con plazo formal de inicio.',
+        'Aseo profundo de reposeras y revisión de jardineras del sector.'
+      ],
+      kpi_cierre: 'Filtración reparada y certificada. Sector piscina ≥ 4.0/5 en re-inspección.',
+      kpi_seg: 'Reporte semanal del BM al Comité con avance de reparación.'
+    },
+    {
+      prio: 'media', dim: 'Áreas Comunes Amenities', plazo: 21, responsable: 'BM + Aseo',
+      titulo: 'Estandarizar limpieza de pisos en los 8 quinchos',
+      hallazgo: 'Los 8 quinchos comparten patrón sistemático: piso en 2.0–3.0/5, muros/puertas en 3.0/5, mobiliario en 3.0/5, jardineras en 3.0/5. Áreas comunes en 85.1%.',
+      accion: [
+        'Programa de aseo profundo de los 8 quinchos: piso, muros, puertas, guardapolvos y mobiliario.',
+        'Revisión de las jardineras (colillas, basura, plantas, riego).',
+        'Check-list específico de quinchos en cada turno de aseo con firma del responsable.'
+      ],
+      kpi_cierre: 'Los 8 quinchos alcanzan ≥ 4.0/5 promedio, sin ítems en piso por debajo de 4.0.',
+      kpi_seg: 'Revisión quincenal del BM con foto antes/después.'
+    },
+    {
+      prio: 'media', dim: 'Áreas Comunes Amenities', plazo: 14, responsable: 'BM + Aseo',
+      titulo: 'Limpieza profunda de ventanas en Hall Acceso, Cowork y Cocinas',
+      hallazgo: 'Hall Acceso con ventanas en 1.0/5. Cowork vidrios en 3.0/5. Cocina Comunitaria vidrios en 2.0/5. Sala de Juegos vidrios en 2.0/5. Sala Kids ventanas en 2.0/5.',
+      accion: [
+        'Limpieza profunda de cristales con producto adecuado en las 5 áreas señaladas.',
+        'Revisión de vidrios para detectar quebraduras y derivar a mantención.',
+        'Programa quincenal de limpieza de cristales con responsable rotativo.'
+      ],
+      kpi_cierre: 'Las 5 áreas con vidrios/ventanas ≥ 4.0/5 en re-inspección.',
+      kpi_seg: 'Inspección visual semanal del BM en recorrido.'
+    },
+    {
+      prio: 'media', dim: 'Áreas de Servicio', plazo: 14, responsable: 'BM + Aseo',
+      titulo: 'Recuperar Sala de Transición y mejorar Sala de Basura',
+      hallazgo: 'Sala de Transición en 3.0/5 (piso 2.0, montacarga 2.0). Sala de Basura piso en 2.0/5. Sala de reciclaje con basura acumulada (2.0/5).',
+      accion: [
+        'Aseo profundo y mantención del montacarga.',
+        'Recambio de horarios de recolección si hay acumulación.',
+        'Sistema de chequeo por turno (mañana/tarde/noche) con firma.'
+      ],
+      kpi_cierre: 'Sala Transición ≥ 4.0/5, Sala Basura piso ≥ 4.0/5.',
+      kpi_seg: 'Inspección diaria durante 14 días, luego cambia a semanal.'
+    },
+    {
+      prio: 'media', dim: 'Departamentos Vacantes', plazo: 14, responsable: 'BM + Aseo',
+      titulo: 'Mejorar estándar de unidades vacantes (pilotos vs. vacíos)',
+      hallazgo: 'Piso departamento 3.33/5 (3 unidades). Puerta acceso, ventanas, muros baño en 3.67/5. Piso terraza en 3.33/5. Pulso reporta "deptos vacíos sucios" mientras pilotos están bien.',
+      accion: [
+        'Estandarizar protocolo de entrega: el departamento vacante debe tener el mismo estándar que el piloto.',
+        'Check-list de 27 puntos firmado por Aseo antes de cada visita.',
+        'Foco especial en pisos y terrazas (recurrente en hallazgos).'
+      ],
+      kpi_cierre: 'Próxima muestra de 3 departamentos vacantes ≥ 4.5/5 promedio.',
+      kpi_seg: 'Auditoría interna semanal de 1 unidad al azar.'
+    },
+    {
+      prio: 'baja', dim: 'Pasillos Departamentos', plazo: 30, responsable: 'BM + Mantención',
+      titulo: 'Mejorar iluminación general de pasillos',
+      hallazgo: 'Iluminación de pasillos en 2.67/5. Vidrios ventanas pasillo en 3.0/5. Pasillos en general en 91.7%, pero estos dos ítems arrastran.',
+      accion: [
+        'Mapa de iluminación de pasillos: identificar puntos con falla y reponer ampolletas/luminarias.',
+        'Limpieza profunda de vidrios de ventanas de pasillos.',
+        'Calendario trimestral de revisión de iluminación.'
+      ],
+      kpi_cierre: 'Iluminación de pasillos ≥ 4.0/5 en re-inspección.',
+      kpi_seg: 'Revisión mensual del BM en recorrido.'
+    }
+  ],
+  'Holley': [
+    {
+      prio: 'alta', dim: 'Compliance', plazo: 30, responsable: 'BM + RRHH',
+      titulo: 'Actualizar y socializar el Plan de Emergencia',
+      hallazgo: 'Plan de Emergencia en 0/1 ("no se evidenció"). Guest Service no sabe dónde está (0/1). BM con curso hecho pero sin inscripción MINVU.',
+      accion: [
+        'Elaborar Plan de Emergencia formal del edificio con consultor especializado.',
+        'Socializar el plan con todo el personal (sesión presencial con asistencia).',
+        'Ubicar copia visible en recepción y oficina del BM; Guest Service debe poder mostrarla a primer requerimiento.',
+        'Inscribir al BM en el Registro MINVU.'
+      ],
+      kpi_cierre: 'Plan de Emergencia vigente, físico y digital. 100% del personal capacitado (test de 5 preguntas a Guest Service).',
+      kpi_seg: 'Auditoría sorpresa mensual a Guest Service por parte del BM.'
+    },
+    {
+      prio: 'alta', dim: 'Áreas Comunes Amenities', plazo: 14, responsable: 'BM + Aseo',
+      titulo: 'Recuperar zona piscina y BBQs (problema crítico de pisos)',
+      hallazgo: 'Piscina: ventanas/piso/muros en 2.0/5; lavapies en 2.0/5; reposeras en 2.0/5. Los 3 BBQs comparten piso en 2.0/5. Pulso interno: "Piscina falta pintura, palmeta de borde rota (peligro)".',
+      accion: [
+        'Aseo profundo y pintura del sector piscina, incluyendo cristales que dan al gimnasio.',
+        'Reparación urgente de la palmeta rota del borde piscina (riesgo de accidente).',
+        'Reposición o aseo profundo de las reposeras.',
+        'Aseo profundo de pisos de los 3 BBQ.'
+      ],
+      kpi_cierre: 'Piscina y BBQs ≥ 4.0/5 promedio. Palmeta reparada con verificación de seguridad.',
+      kpi_seg: 'Inspección semanal del BM hasta cierre.'
+    },
+    {
+      prio: 'alta', dim: 'Pulso Interno', plazo: 21, responsable: 'BM + Mantención',
+      titulo: 'Resolver problema de aroma persistente (responsabilidad cruzada con restaurantes)',
+      hallazgo: 'Pulso interno reporta aroma en 2.33/5, lo más bajo del edificio. "Prevalece el olor a comida". "Bajo en general, responsabilidad del mal olor de estacionamientos y restoranes". Última visita reporta mejoría (5.0/5 con Santi).',
+      accion: [
+        'Diagnóstico técnico del sistema de extracción y aire de pasillos, hall y núcleo de ascensores.',
+        'Coordinar con locales comerciales (restaurantes) para revisar su sistema de extracción.',
+        'Instalar inhibidores de olores en hall de acceso y pasillos críticos.',
+        'Mantener el estándar logrado por Santi (documentar protocolo de aseo aplicado).'
+      ],
+      kpi_cierre: 'Aroma ≥ 4.0/5 en 2 visitas consecutivas de pulso interno.',
+      kpi_seg: 'Revisión semanal del BM en recorrido olfativo de zonas críticas.'
+    },
+    {
+      prio: 'alta', dim: 'Pulso Interno', plazo: 21, responsable: 'BM + Mantención + Aseo',
+      titulo: 'Recuperar limpieza y experiencia de estacionamientos',
+      hallazgo: 'Pulso: "estacionamientos asquerosos, nota 0", "el edificio en general bien, pero el estacionamiento lo mata". Auditoría: Hall Ascensores Piso -1 y -6 con luces en 2.0/5; muros en 3.0/5.',
+      accion: [
+        'Aseo profundo de los 3 niveles de subterráneo (-1, -2, -6): pisos, muros y cielo.',
+        'Recambio de luminarias en Halls Ascensores Piso -1 y -6.',
+        'Plan de aseo permanente en niveles -1, -2 y -6 con frecuencia diaria.'
+      ],
+      kpi_cierre: 'Subterráneos ≥ 4.0/5 en re-inspección. Pulso de estacionamientos ≥ 4.0/5.',
+      kpi_seg: 'Inspección diaria del BM durante primera semana; semanal luego.'
+    },
+    {
+      prio: 'media', dim: 'Personal', plazo: 21, responsable: 'BM + RRHH',
+      titulo: 'Capacitación y dotación de uniforme para Guest Service',
+      hallazgo: 'Guest Service en 3.75/5 (más bajo del personal). Uso del uniforme en 1.0/5. Presentación personal en 3.0/5. Conocimiento de procedimientos, dudas frecuentes, incidencias y reclamos en 4.0/5 cada uno. Pulso confirma: "uniforme guest service" pendiente en 3 visitas seguidas.',
+      accion: [
+        'Reponer uniformes para Guest Service completo (cuestión recurrente desde marzo).',
+        'Capacitación de 3 sesiones en procedimientos, manejo de incidencias y resolución de reclamos.',
+        'Definir protocolo visual de presentación personal y validar diariamente.'
+      ],
+      kpi_cierre: '100% del equipo Guest Service con uniforme y presentación ≥ 4.5/5. Conocimientos ≥ 4.5/5 en próxima auditoría.',
+      kpi_seg: 'Validación visual diaria del BM al inicio del turno.'
+    },
+    {
+      prio: 'media', dim: 'Departamentos Vacantes', plazo: 14, responsable: 'BM + Mantención',
+      titulo: 'Diagnóstico de termoacumuladores y shower',
+      hallazgo: 'Termoacumulador en 3.0/5 (3 unidades). Shower en 3.33/5. Ventanas y vidrios en 2.67/5. Vanitorio en baño en 3.0/5.',
+      accion: [
+        'Diagnóstico técnico de los termoacumuladores de las unidades observadas.',
+        'Revisión de shower (juntas, grifería, presión) en las 3 unidades.',
+        'Aseo profundo y reparación de vidrios y vanitorios donde aplique.'
+      ],
+      kpi_cierre: 'Próxima muestra de 3 departamentos vacantes ≥ 4.5/5 promedio.',
+      kpi_seg: 'Check-list de 36 puntos firmado por Mantención + Aseo en cada rotación.'
+    },
+    {
+      prio: 'baja', dim: 'Áreas Comunes Amenities', plazo: 30, responsable: 'BM + Aseo',
+      titulo: 'Detalle fino en Gimnasio y Salón Gourmet',
+      hallazgo: 'Gimnasio: vidrios/espejo en 2.0/5. Salón Gourmet Chef´Cut: ventanas/cortinas en 3.0/5; muros, cielos y pisos en 3.0/5. Alfombra del Roof Top Lounge en 3.0/5.',
+      accion: [
+        'Limpieza profunda de vidrios y espejos del gimnasio.',
+        'Aseo profundo de muros, cielos y pisos del Salón Gourmet.',
+        'Diagnóstico de la alfombra del Roof Top: lavado profundo o reposición.'
+      ],
+      kpi_cierre: 'Gimnasio, Salón Gourmet y Roof Top ≥ 4.5/5 promedio.',
+      kpi_seg: 'Revisión quincenal del BM.'
+    }
+  ],
+  'SPOT Nueva Kennedy': [
+    {
+      prio: 'alta', dim: 'Compliance', plazo: 60, responsable: 'BM + RRHH',
+      titulo: 'Cerrar capacitaciones pendientes del equipo (sigue siendo el ítem más bajo)',
+      hallazgo: 'Aunque Compliance global subió a 95.5%, el sub-ítem Certificaciones y Capacitación está en 19% (0.19/1). BM no inscrito en MINVU. Cursos de Extintores, Trabajos en Altura, Rescate Ascensores y Plan de Emergencia con personal certificado activo en 0/1. Plan de Emergencia desactualizado (2022).',
+      accion: [
+        'Inscribir al BM en el Registro MINVU.',
+        'Agendar y ejecutar los 3 cursos pendientes (Extintores, Trabajos en Altura, Rescate Ascensores) con al menos 2 personas certificadas en cada uno.',
+        'Actualizar el Plan de Emergencia a 2026 y socializarlo con Guest Service.'
+      ],
+      kpi_cierre: 'Sub-ítem Certificaciones y Capacitación pasa de 0.19 a ≥ 0.75. Plan de Emergencia 2026 vigente y conocido por Guest Service.',
+      kpi_seg: 'Reporte mensual al Comité con avance de certificaciones.'
+    },
+    {
+      prio: 'media', dim: 'Áreas Comunes Amenities', plazo: 21, responsable: 'BM + Aseo',
+      titulo: 'Mantener excelencia del piso 1 y replicar a sector piscina y subterráneos',
+      hallazgo: 'El edificio tiene 94.4% (Excelente) y Personal en 96.9%, pero hay brechas localizadas: Piscina con muros, escalera y ducha en 3.0/5; Pasillo Hall Ascensores Piso 39 muros/pisos en 3.0/5; Cowork TV en 1.0/5.',
+      accion: [
+        'Aseo profundo y mantención preventiva del sector piscina (muros, escalera, ducha lavapies).',
+        'Aseo profundo del Pasillo Hall Ascensores Piso 39.',
+        'Reparar o reemplazar el TV del Cowork (1.0/5).',
+        'Documentar el estándar del piso 1 (que está impecable según pulso interno) como protocolo replicable.'
+      ],
+      kpi_cierre: 'Piscina, Piso 39 y Cowork ≥ 4.5/5 en re-inspección. Protocolo documentado y aplicado en otros sectores.',
+      kpi_seg: 'Revisión quincenal del BM con foto antes/después.'
+    },
+    {
+      prio: 'media', dim: 'Pasillos Departamentos', plazo: 21, responsable: 'BM + Mantención',
+      titulo: 'Mejorar iluminación de pasillos (único ítem bajo del eje)',
+      hallazgo: 'Pasillos en 94.3% (Esperado). Iluminación de pasillos en 3.0/5 (4 unidades). Cerraría la brecha para llegar a Excelente.',
+      accion: [
+        'Mapa de iluminación de pasillos: identificar puntos con falla y reponer ampolletas/luminarias.',
+        'Revisión de drivers y sensores donde aplique.',
+        'Calendario trimestral de revisión preventiva.'
+      ],
+      kpi_cierre: 'Iluminación de pasillos ≥ 4.5/5 en re-inspección.',
+      kpi_seg: 'Revisión mensual del BM en recorrido nocturno.'
+    },
+    {
+      prio: 'media', dim: 'Departamentos Vacantes', plazo: 14, responsable: 'BM + Mantención',
+      titulo: 'Atender detalles finos de unidades vacantes',
+      hallazgo: 'Departamentos en 90.3% (Esperado). Ventanas/vidrios en 3.75/5. Muros, cielos y baranda terraza en 3.5/5. Muros y cielo baño en 3.5/5. Puertas closet en 4.25/5.',
+      accion: [
+        'Diagnóstico de ventanas (limpieza profunda, juntas, sellos).',
+        'Reparación/limpieza de muros y barandas de terraza.',
+        'Mantención fina de muros y cielos de baño.'
+      ],
+      kpi_cierre: 'Próxima muestra de 4 departamentos vacantes ≥ 4.7/5 promedio sin ítems < 4.0.',
+      kpi_seg: 'Check-list firmado por Mantención + Aseo en cada rotación.'
+    },
+    {
+      prio: 'baja', dim: 'Personal', plazo: 30, responsable: 'BM + Guest Service',
+      titulo: 'Llevar Guest Service de "Esperado" a "Excelente"',
+      hallazgo: 'Personal en 96.9% (Excelente). Guest Service en 4.38/5: conocimientos, procedimientos, presentación y uniforme en 4.0/5. Todos los otros equipos están en 5.0/5.',
+      accion: [
+        'Refuerzo de capacitación en procedimientos, manejo de incidencias y reclamos.',
+        'Revisión y reposición de uniforme donde aplique.',
+        'Plan de coaching mensual del BM al equipo Guest Service.'
+      ],
+      kpi_cierre: 'Guest Service alcanza ≥ 4.8/5 en próxima auditoría.',
+      kpi_seg: 'Sesión mensual de coaching del BM, documentada.'
+    },
+    {
+      prio: 'baja', dim: 'Pulso Interno', plazo: 30, responsable: 'BM + Comité LAR',
+      titulo: 'Activar pulso interno (sin visitas este mes)',
+      hallazgo: 'Edificio no recibió visitas internas del equipo LAR en el ciclo de mayo. Es la única dimensión sin datos.',
+      accion: [
+        'Coordinar con el equipo de auditoría interna LAR para programar visita.',
+        'Mantener el estándar actual mientras se establece la frecuencia regular.',
+        'Apuntar a 2 visitas mensuales como mínimo.'
+      ],
+      kpi_cierre: 'Al menos 1 visita interna registrada antes del próximo Comité.',
+      kpi_seg: 'Confirmación de visitas con el equipo central.'
+    }
+  ]
+};
+
+let ACC_FILTER = 'todos';
+
+function renderAccionables() {
+  const acciones = (DATA && DATA.plan_accion) ? DATA.plan_accion : (ACCIONABLES[CURRENT_BUILDING] || []);
+  const wrapSummary = document.getElementById('acc-summary');
+  const wrapFilters = document.getElementById('acc-filters');
+  const wrapList = document.getElementById('acc-list');
+  const aside = document.getElementById('acc-aside');
+
+  if (!acciones.length) {
+    aside.textContent = 'sin accionables';
+    wrapSummary.innerHTML = '';
+    wrapFilters.innerHTML = '';
+    wrapList.innerHTML = '<div class="acc-empty"><strong>Sin accionables definidos</strong>No hay un plan de acción cargado para este edificio.</div>';
+    return;
+  }
+
+  const total = acciones.length;
+  const alta = acciones.filter(a => a.prio === 'alta').length;
+  const media = acciones.filter(a => a.prio === 'media').length;
+  const baja = acciones.filter(a => a.prio === 'baja').length;
+
+  aside.textContent = `${total} accionables · ${alta} alta · ${media} media · ${baja} baja`;
+
+  wrapSummary.innerHTML = `
+    <div class="acc-summary-card">
+      <div class="label">Total accionables</div>
+      <div class="value">${total}</div>
+      <div class="sub">Plan vigente del ciclo</div>
+    </div>
+    <div class="acc-summary-card">
+      <div class="label">Prioridad alta</div>
+      <div class="value alta">${alta}</div>
+      <div class="sub">Acción dentro de 7–14 días</div>
+    </div>
+    <div class="acc-summary-card">
+      <div class="label">Prioridad media</div>
+      <div class="value media">${media}</div>
+      <div class="sub">Acción dentro del mes</div>
+    </div>
+    <div class="acc-summary-card">
+      <div class="label">Prioridad baja</div>
+      <div class="value baja">${baja}</div>
+      <div class="sub">Acción dentro del trimestre</div>
+    </div>
+  `;
+
+  // Filtros
+  const dims = Array.from(new Set(acciones.map(a => a.dim)));
+  const filters = [
+    { key: 'todos', label: 'Todos', count: total },
+    { key: 'alta', label: 'Prioridad alta', count: alta },
+    { key: 'media', label: 'Prioridad media', count: media },
+    { key: 'baja', label: 'Prioridad baja', count: baja },
+  ];
+
+  let filtersHTML = '<span class="acc-filters-label">Filtrar</span>';
+  filters.forEach(f => {
+    filtersHTML += `<button class="acc-filter-btn ${ACC_FILTER === f.key ? 'active' : ''}" data-filter="${f.key}">${f.label}<span class="count">${f.count}</span></button>`;
+  });
+  wrapFilters.innerHTML = filtersHTML;
+  wrapFilters.querySelectorAll('.acc-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ACC_FILTER = btn.dataset.filter;
+      renderAccionables();
+    });
+  });
+
+  // Lista
+  const filtered = ACC_FILTER === 'todos' ? acciones : acciones.filter(a => a.prio === ACC_FILTER);
+  const prioOrder = { alta: 0, media: 1, baja: 2 };
+  filtered.sort((a, b) => prioOrder[a.prio] - prioOrder[b.prio]);
+
+  if (!filtered.length) {
+    wrapList.innerHTML = '<div class="acc-empty"><strong>Sin accionables en esta prioridad</strong>Cambiá el filtro para ver más.</div>';
+    return;
+  }
+
+  const prioLabel = { alta: 'Alta', media: 'Media', baja: 'Baja' };
+
+  let html = '';
+  filtered.forEach((a, idx) => {
+    html += `
+      <div class="acc-card ${a.prio}" data-idx="${idx}">
+        <div class="acc-head" onclick="toggleAccionable(this)">
+          <span class="acc-prio ${a.prio}">${prioLabel[a.prio]}</span>
+          <div class="acc-head-mid">
+            <div class="acc-title">${a.titulo}</div>
+            <div class="acc-meta">
+              <span class="dim">${a.dim}</span>
+              <span>· Responsable: ${a.responsable}</span>
+            </div>
+          </div>
+          <div class="acc-plazo">
+            <span class="num">${a.plazo}</span>
+            <span class="unit">días</span>
+          </div>
+          <span class="acc-toggle">+</span>
+        </div>
+        <div class="acc-body">
+          <div class="acc-section">
+            <div class="acc-section-label">Hallazgo de la auditoría</div>
+            <div class="acc-section-content">${a.hallazgo}</div>
+          </div>
+          <div class="acc-section">
+            <div class="acc-section-label">Acciones concretas</div>
+            <div class="acc-section-content">
+              <ul>${a.accion.map(item => `<li>${item}</li>`).join('')}</ul>
+            </div>
+          </div>
+          <div class="acc-section">
+            <div class="acc-section-label">Métricas</div>
+            <div class="acc-kpi">
+              <div class="acc-kpi-box">
+                <div class="k-label">KPI de cierre</div>
+                <div class="k-value">${a.kpi_cierre}</div>
+              </div>
+              <div class="acc-kpi-box">
+                <div class="k-label">KPI de seguimiento</div>
+                <div class="k-value">${a.kpi_seg}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  wrapList.innerHTML = html;
+}
+
+function toggleAccionable(headEl) {
+  const card = headEl.parentElement;
+  card.classList.toggle('open');
+}
+
+// ============ INIT (carga vía sesión autenticada) ============
+async function bootstrap() {
+  try {
+    const r = await fetch('/api/data', { credentials: 'same-origin' });
+    if (r.status === 401) { window.location.href = '/login.html'; return; }
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'No autorizado');
+    LAR_LOGO = d.larLogo || '';
+    if (d.pending) { renderPending(d.buildingName); injectLogout(); return; }
+    BUILDING_ORDER = d.order;
+    ALL_BUILDINGS = d.buildings;
+    CURRENT_BUILDING = BUILDING_ORDER[0];
+    DATA = ALL_BUILDINGS[CURRENT_BUILDING];
+    if (BUILDING_ORDER.length === 1) document.body.classList.add('single-building');
+    renderAll();
+    injectLogout();
+  } catch (e) {
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div style="padding:24px;font-family:sans-serif;color:#b00;background:#fff3f3;border:1px solid #f3c;margin:16px;border-radius:8px">' +
+      'No se pudieron cargar los datos. Detalle: ' + e.message + '</div>');
+    console.error(e);
+  }
+}
+function renderPending(name) {
+  document.body.insertAdjacentHTML('afterbegin',
+    '<div style="max-width:640px;margin:80px auto;padding:48px 40px;text-align:center;font-family:Segoe UI,system-ui,sans-serif;background:#fff;border:1px solid #e3eced;border-radius:16px;box-shadow:0 12px 40px rgba(0,60,65,0.08)">' +
+    (LAR_LOGO ? '<img src="'+LAR_LOGO+'" style="height:48px;margin-bottom:28px">' : '') +
+    '<h1 style="font-size:22px;color:#1a2b2d;margin:0 0 12px">Multifamily ' + (name||'') + '</h1>' +
+    '<p style="font-size:15px;color:#6b7d7f;line-height:1.6;margin:0">Aún no hay auditorías disponibles para tu edificio.<br>En cuanto se cargue la primera auditoría, aparecerá aquí automáticamente.</p>' +
+    '</div>');
+}
+function injectLogout() {
+  if (document.getElementById('lar-logout')) return;
+  const b = document.createElement('button');
+  b.id = 'lar-logout'; b.textContent = 'Cerrar sesión';
+  b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:8px 16px;font-size:13px;font-weight:600;color:#00A8B4;background:#fff;border:1.5px solid #00A8B4;border-radius:8px;cursor:pointer;font-family:Segoe UI,system-ui,sans-serif';
+  b.onclick = async () => { await fetch('/api/logout', { method:'POST', credentials:'same-origin' }); window.location.href = '/login.html'; };
+  document.body.appendChild(b);
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrap);
+} else {
+  bootstrap();
+}
+
+</script>
+</body>
+</html>
