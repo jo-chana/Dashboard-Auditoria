@@ -20,14 +20,19 @@ export async function onRequestGet({ request, env, ASSETS }) {
   }
 
   // helper para leer un archivo estático del propio sitio (carpeta /data)
+  // Usamos env.ASSETS.fetch (binding de Pages) que lee el archivo directamente
+  // SIN pasar por el _middleware (que bloquea /data/ para accesos externos).
   const origin = new URL(request.url).origin;
+  const assetFetch = (env && env.ASSETS && env.ASSETS.fetch)
+    ? (p) => env.ASSETS.fetch(new Request(`${origin}${p}`))
+    : (p) => fetch(`${origin}${p}`);
   async function readData(file) {
-    const r = await fetch(`${origin}/data/${file}`);
+    const r = await assetFetch(`/data/${file}`);
     if (!r.ok) return null;
     return r.json();
   }
   async function readText(file) {
-    const r = await fetch(`${origin}/data/${file}`);
+    const r = await assetFetch(`/data/${file}`);
     if (!r.ok) return null;
     return r.text();
   }
