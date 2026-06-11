@@ -2104,9 +2104,19 @@ function renderHero(){
     const items_eval_total = opAristas.reduce((s,a) => s + a.items_eval/Math.max(a.pct_eval, 0.01), 0);
     items_total = Math.round(items_eval_total);
   }
-  // Promedio de otros edificios bajo el mismo modo
+  // Promedio de otros edificios bajo el mismo modo.
+  // Si el usuario solo tiene su propio edificio cargado (caso BM/BMA), usamos
+  // el promedio del portafolio precalculado y guardado en el JSON (avg_otros),
+  // que se computó en el servidor con todos los edificios sin exponer sus datos.
   const otherPcts = BUILDING_ORDER.filter(n => n !== CURRENT_BUILDING).map(n => effectiveTotal(ALL_BUILDINGS[n]));
-  const avgOtros = otherPcts.length ? otherPcts.reduce((a,b)=>a+b,0)/otherPcts.length : 0;
+  let avgOtros;
+  if (otherPcts.length) {
+    avgOtros = otherPcts.reduce((a,b)=>a+b,0)/otherPcts.length;
+  } else if (DATA.resumen.total.avg_otros != null) {
+    avgOtros = DATA.resumen.total.avg_otros;
+  } else {
+    avgOtros = 0;
+  }
 
   const cls = colorClass(pct);
   const cat = categoryLabel(pct);
