@@ -85,13 +85,33 @@ export async function onRequestGet({ request, env, ASSETS }) {
     return json({ ok: true, scope: name, pending: true, buildingName: name, known, larLogo });
   }
 
-  // Solo este edificio. El avg_otros embebido ya permite el comparativo
-  // contra el promedio del portafolio sin exponer a los demás.
+  // Calcular el promedio del PORTAFOLIO COMPLETO (los mismos números que ve el
+  // comité), en ambos modos. Cargamos todos los edificios SOLO en el servidor;
+  // al BM le mandamos únicamente su edificio + estos dos promedios. Los datos
+  // de los otros edificios nunca salen del servidor.
+  const COMPARABLE_DIMS = ['Departamentos Vacantes','Pasillos Departamentos','Áreas Comunes Amenities','Áreas de Servicio','Personal'];
+  function totalCon(b) { return b.resumen.total.pct; }
+  function totalSin(b) {
+    const vals = COMPARABLE_DIMS.map(d => {
+      const ar = b.resumen.aristas.find(a => a.nombre === d);
+      return ar ? ar.pct : null;
+    }).filter(v => v != null);
+    return vals.length ? vals.reduce((a,c)=>a+c,0)/vals.length : null;
+  }
+  const allData = await Promise.all(manifest.buildings.map(b => readData(b.file)));
+  const valid = allData.filter(Boolean);
+  const portAvgCon = valid.reduce((s,b)=>s+totalCon(b),0)/valid.length;
+  const sinVals = valid.map(totalSin).filter(v=>v!=null);
+  const portAvgSin = sinVals.length ? sinVals.reduce((a,c)=>a+c,0)/sinVals.length : null;
+
+  // Solo este edificio + los dos promedios del portafolio completo.
   return json({
     ok: true,
     scope: name,
     order: [name],
     buildings: { [name]: data },
+    portAvgCon,
+    portAvgSin,
     larLogo,
   });
 }
