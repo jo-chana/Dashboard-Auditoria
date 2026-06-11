@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1988,6 +1989,8 @@ let LAR_LOGO = "";
 let BUILDING_ORDER = [];
 let CURRENT_BUILDING = null;
 let DATA = null;
+let PORT_AVG_CON = null;
+let PORT_AVG_SIN = null;
 
 function colorClass(pct) {
   if (pct >= 0.95) return 'excellent';
@@ -2104,14 +2107,18 @@ function renderHero(){
     const items_eval_total = opAristas.reduce((s,a) => s + a.items_eval/Math.max(a.pct_eval, 0.01), 0);
     items_total = Math.round(items_eval_total);
   }
-  // Promedio de otros edificios bajo el mismo modo.
-  // Si el usuario solo tiene su propio edificio cargado (caso BM/BMA), usamos
-  // el promedio del portafolio precalculado y guardado en el JSON (avg_otros),
-  // que se computó en el servidor con todos los edificios sin exponer sus datos.
+  // Promedio de referencia bajo el mismo modo.
+  // - Comité (varios edificios cargados): promedio de los demás edificios.
+  // - BM/BMA (un solo edificio): promedio del PORTAFOLIO COMPLETO precalculado
+  //   en el servidor, que cambia según el toggle Con/Sin Compliance.
   const otherPcts = BUILDING_ORDER.filter(n => n !== CURRENT_BUILDING).map(n => effectiveTotal(ALL_BUILDINGS[n]));
   let avgOtros;
   if (otherPcts.length) {
     avgOtros = otherPcts.reduce((a,b)=>a+b,0)/otherPcts.length;
+  } else if (INCLUDE_COMPLIANCE && PORT_AVG_CON != null) {
+    avgOtros = PORT_AVG_CON;
+  } else if (!INCLUDE_COMPLIANCE && PORT_AVG_SIN != null) {
+    avgOtros = PORT_AVG_SIN;
   } else if (DATA.resumen.total.avg_otros != null) {
     avgOtros = DATA.resumen.total.avg_otros;
   } else {
@@ -3419,6 +3426,9 @@ async function bootstrap() {
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'No autorizado');
     LAR_LOGO = d.larLogo || '';
+    // Promedios del portafolio completo (solo presentes en vista BM/BMA)
+    PORT_AVG_CON = (typeof d.portAvgCon === 'number') ? d.portAvgCon : null;
+    PORT_AVG_SIN = (typeof d.portAvgSin === 'number') ? d.portAvgSin : null;
     if (d.pending) { renderPending(d.buildingName); injectLogout(); return; }
     BUILDING_ORDER = d.order;
     ALL_BUILDINGS = d.buildings;
