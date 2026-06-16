@@ -1747,6 +1747,22 @@
 .single-building .building-selector, body.single-building [class*="selector"]{display:none !important;}
 /* BM/BMA (un solo edificio): ocultar la pestaña de comparativo de portafolio */
 body.single-building .view-tab[data-view="portafolio"]{display:none !important;}
+
+/* ====== IMPRESIÓN / EXPORTAR A PDF ====== */
+@media print {
+  /* Forzar que se impriman los colores de fondo y texto tal cual se ven */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  /* Ocultar botones flotantes y controles que no deben salir en el PDF */
+  .no-print, #lar-logout, #lar-pdf, .view-tabs { display: none !important; }
+  /* Quitar márgenes/sombras que desperdician espacio en papel */
+  body { background: #fff !important; }
+  /* Evitar que tarjetas y secciones se corten entre páginas */
+  .acc-card, .hero, .card, .arista-card, .build-card,
+  section, .seccion { break-inside: avoid; page-break-inside: avoid; }
+  /* Dar un poco de aire arriba de cada sección principal */
+  .seccion-titulo, h2 { break-after: avoid; page-break-after: avoid; }
+  @page { margin: 14mm; }
+}
 </style>
 </head>
 <body>
@@ -3462,6 +3478,20 @@ function injectLogout() {
   b.style.cssText = 'position:fixed;top:16px;right:16px;z-index:9999;padding:8px 16px;font-size:13px;font-weight:600;color:#00A8B4;background:#fff;border:1.5px solid #00A8B4;border-radius:8px;cursor:pointer;font-family:Segoe UI,system-ui,sans-serif';
   b.onclick = async () => { await fetch('/api/logout', { method:'POST', credentials:'same-origin' }); window.location.href = '/login.html'; };
   document.body.appendChild(b);
+  injectPdfButton();
+}
+
+// Botón "Descargar PDF" — solo para el comité (varios edificios cargados).
+// Usa la impresión nativa del navegador; el CSS @media print limpia la vista.
+function injectPdfButton() {
+  if (document.getElementById('lar-pdf')) return;
+  if (!BUILDING_ORDER || BUILDING_ORDER.length <= 1) return; // solo comité
+  const p = document.createElement('button');
+  p.id = 'lar-pdf'; p.textContent = 'Descargar PDF';
+  p.className = 'no-print';
+  p.style.cssText = 'position:fixed;top:16px;right:148px;z-index:9999;padding:8px 16px;font-size:13px;font-weight:600;color:#fff;background:#00A8B4;border:1.5px solid #00A8B4;border-radius:8px;cursor:pointer;font-family:Segoe UI,system-ui,sans-serif';
+  p.onclick = () => window.print();
+  document.body.appendChild(p);
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', bootstrap);
