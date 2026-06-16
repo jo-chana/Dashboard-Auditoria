@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Dashboard Auditoría — Edificio Brooklyn — Abril–Mayo 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   /* ====== LAR GROUP BRAND SYSTEM ======
      Pantone 7467 C  →  #00A8B4   (turquesa corporativo)
@@ -3482,7 +3484,7 @@ function injectLogout() {
 }
 
 // Botón "Descargar PDF" — solo para el comité (varios edificios cargados).
-// Usa la impresión nativa del navegador; el CSS @media print limpia la vista.
+// Descarga directa con un clic (html2canvas captura la vista, jsPDF arma el PDF).
 function injectPdfButton() {
   if (document.getElementById('lar-pdf')) return;
   if (!BUILDING_ORDER || BUILDING_ORDER.length <= 1) return; // solo comité
@@ -3490,8 +3492,62 @@ function injectPdfButton() {
   p.id = 'lar-pdf'; p.textContent = 'Descargar PDF';
   p.className = 'no-print';
   p.style.cssText = 'position:fixed;top:16px;right:148px;z-index:9999;padding:8px 16px;font-size:13px;font-weight:600;color:#fff;background:#00A8B4;border:1.5px solid #00A8B4;border-radius:8px;cursor:pointer;font-family:Segoe UI,system-ui,sans-serif';
-  p.onclick = () => window.print();
+  p.onclick = descargarPDF;
   document.body.appendChild(p);
+}
+
+async function descargarPDF() {
+  const btn = document.getElementById('lar-pdf');
+  const logout = document.getElementById('lar-logout');
+  const original = btn ? btn.textContent : '';
+  try {
+    if (typeof html2canvas === 'undefined' || !window.jspdf) {
+      alert('No se pudo cargar el generador de PDF. Revisa tu conexión e intenta de nuevo.');
+      return;
+    }
+    if (btn) { btn.textContent = 'Generando...'; btn.disabled = true; }
+    // Ocultar botones flotantes durante la captura
+    if (btn) btn.style.visibility = 'hidden';
+    if (logout) logout.style.visibility = 'hidden';
+
+    const target = document.body;
+    const canvas = await html2canvas(target, {
+      scale: 2, useCORS: true, backgroundColor: '#ffffff',
+      windowWidth: target.scrollWidth, windowHeight: target.scrollHeight
+    });
+
+    // Restaurar botones
+    if (btn) btn.style.visibility = '';
+    if (logout) logout.style.visibility = '';
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 8;
+    const imgW = pageW - margin * 2;
+    const imgH = (canvas.height * imgW) / canvas.width;
+
+    // Partir la imagen en varias páginas
+    let heightLeft = imgH;
+    let position = margin;
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    pdf.addImage(imgData, 'JPEG', margin, position, imgW, imgH);
+    heightLeft -= (pageH - margin * 2);
+    while (heightLeft > 0) {
+      position = heightLeft - imgH + margin;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', margin, position, imgW, imgH);
+      heightLeft -= (pageH - margin * 2);
+    }
+    pdf.save('Auditorias-LAR.pdf');
+  } catch (e) {
+    console.error(e);
+    alert('Hubo un problema al generar el PDF. Intenta de nuevo.');
+  } finally {
+    if (btn) { btn.textContent = original; btn.disabled = false; btn.style.visibility = ''; }
+    if (logout) logout.style.visibility = '';
+  }
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', bootstrap);
