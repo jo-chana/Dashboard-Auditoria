@@ -3506,40 +3506,75 @@ async function descargarPDF() {
       return;
     }
     if (btn) { btn.textContent = 'Generando...'; btn.disabled = true; }
-    // Ocultar botones flotantes durante la captura
     if (btn) btn.style.visibility = 'hidden';
     if (logout) logout.style.visibility = 'hidden';
-
-    const target = document.body;
-    const canvas = await html2canvas(target, {
-      scale: 2, useCORS: true, backgroundColor: '#ffffff',
-      windowWidth: target.scrollWidth, windowHeight: target.scrollHeight
-    });
-
-    // Restaurar botones
-    if (btn) btn.style.visibility = '';
-    if (logout) logout.style.visibility = '';
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
     const margin = 8;
-    const imgW = pageW - margin * 2;
-    const imgH = (canvas.height * imgW) / canvas.width;
+    const usableW = pageW - margin * 2;
+    const usableH = pageH - margin * 2;
 
-    // Partir la imagen en varias páginas
-    let heightLeft = imgH;
-    let position = margin;
-    const imgData = canvas.toDataURL('image/jpeg', 0.92);
-    pdf.addImage(imgData, 'JPEG', margin, position, imgW, imgH);
-    heightLeft -= (pageH - margin * 2);
-    while (heightLeft > 0) {
-      position = heightLeft - imgH + margin;
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', margin, position, imgW, imgH);
-      heightLeft -= (pageH - margin * 2);
+    // Reunir los bloques a capturar: el encabezado + cada sección visible.
+    // Capturar bloque por bloque evita que una tabla o tarjeta se corte
+    // a mitad en el cambio de página.
+    const activeView = document.getElementById('vista-portafolio');
+    const portVisible = activeView && activeView.style.display !== 'none';
+    const root = portVisible ? activeView : document.getElementById('vista-edificio');
+    const blocks = [];
+    const header = document.querySelector('header') || document.querySelector('.header');
+    if (header) blocks.push(header);
+    root.querySelectorAll('.section').forEach(s => {
+      if (s.offsetParent !== null) blocks.push(s); // solo visibles
+    });
+    if (!blocks.length) blocks.push(document.body);
+
+    let cursorY = margin;
+    for (const el of blocks) {
+      const canvas = await html2canvas(el, {
+        scale: 2, useCORS: true, backgroundColor: '#ffffff',
+        windowWidth: document.documentElement.scrollWidth
+      });
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      let blockH = (canvas.height * usableW) / canvas.width;
+
+      // Si el bloque entero es más alto que una página, se escala para caber
+      // (caso raro: tablas muy largas). Se reparte en su propia(s) página(s).
+      if (blockH > usableH) {
+        // Partir este bloque alto en trozos de página, pero solo este bloque.
+        if (cursorY > margin) { pdf.addPage(); cursorY = margin; }
+        let remaining = blockH, sy = 0;
+        const pxPerMm = canvas.height / blockH;
+        while (remaining > 0) {
+          const sliceMm = Math.min(usableH, remaining);
+          const sliceCanvas = document.createElement('canvas');
+          sliceCanvas.width = canvas.width;
+          sliceCanvas.height = Math.round(sliceMm * pxPerMm);
+          const cctx = sliceCanvas.getContext('2d');
+          cctx.fillStyle = '#fff'; cctx.fillRect(0,0,sliceCanvas.width,sliceCanvas.height);
+          cctx.drawImage(canvas, 0, Math.round(sy * pxPerMm), canvas.width, sliceCanvas.height, 0, 0, canvas.width, sliceCanvas.height);
+          pdf.addImage(sliceCanvas.toDataURL('image/jpeg',0.92), 'JPEG', margin, margin, usableW, sliceMm);
+          remaining -= sliceMm; sy += sliceMm;
+          if (remaining > 0) { pdf.addPage(); }
+        }
+        cursorY = margin + (blockH % usableH || usableH);
+        if (cursorY >= pageH - margin) { pdf.addPage(); cursorY = margin; }
+        continue;
+      }
+
+      // Si no entra en lo que queda de la página, pasar a página nueva
+      if (cursorY + blockH > pageH - margin) {
+        pdf.addPage();
+        cursorY = margin;
+      }
+      pdf.addImage(imgData, 'JPEG', margin, cursorY, usableW, blockH);
+      cursorY += blockH + 4; // pequeño espacio entre bloques
     }
+
+    if (btn) btn.style.visibility = '';
+    if (logout) logout.style.visibility = '';
     pdf.save('Auditorias-LAR.pdf');
   } catch (e) {
     console.error(e);
