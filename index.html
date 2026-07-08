@@ -894,52 +894,29 @@
     border-top: 1px solid var(--gris-200);
   }
   .pulso-question.open .pulso-q-body { display: block; }
-  .pulso-obs {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .pulso-obs-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 0;
+  .pulso-comment {
+    padding: 12px 0;
     border-bottom: 1px solid var(--gris-200);
     font-size: 12.5px;
     color: var(--ink);
     line-height: 1.55;
   }
-  .pulso-obs-item:last-child { border-bottom: none; }
-  .pulso-obs-item::before {
-    content: "—";
-    color: var(--turquesa-300);
-    font-weight: 600;
-    flex-shrink: 0;
-    line-height: 1.55;
-  }
-  .pulso-obs-text { flex: 1; }
-  .pulso-obs-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .pulso-obs-fecha {
+  .pulso-comment:last-child { border-bottom: none; }
+  .pulso-comment-meta {
     font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--gris-500);
-    white-space: nowrap;
+    margin-bottom: 4px;
+    font-weight: 600;
   }
-  .score-pill {
+  .pulso-comment-meta .score-pill {
     display: inline-block;
     padding: 1px 6px;
     background: var(--gris-100);
     border-radius: 2px;
+    margin-left: 4px;
     color: var(--ink);
-    font-size: 10px;
-    font-weight: 600;
-    flex-shrink: 0;
-    margin-top: 2px;
   }
   .pulso-no-comments {
     padding: 12px 0;
@@ -2061,12 +2038,6 @@ function fmtFecha(iso) {
   const [y,m,d] = iso.split('-');
   return `${parseInt(d)} / ${meses[parseInt(m)-1]} / ${y}`;
 }
-function fmtMesAnio(iso) {
-  if (!iso) return '';
-  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  const [y,m] = iso.split('-');
-  return `${meses[parseInt(m)-1]} ${y}`;
-}
 
 
 // ============ HEADER ============
@@ -2504,25 +2475,25 @@ function renderPulso() {
     if (q.avg == null) return;
     const cls = scoreColorClass(q.avg, 5);
     const pct = (q.avg / 5) * 100;
-    const obs = (q.comments || []).filter(c => c.comment);
     html += `
       <div class="pulso-question" data-q="${i}">
         <div class="pulso-q-header" onclick="togglePulsoQ(${i})">
           <div class="pulso-q-label">${q.label}</div>
           <div class="pulso-q-score ${cls}">${fmtNum(q.avg)}<span class="max">/5</span></div>
           <div class="pulso-q-bar"><div class="pulso-q-bar-fill ${cls}" style="width:${pct}%"></div></div>
-          <div class="pulso-q-toggle">${obs.length>0 ? '[ + ]' : ''}</div>
+          <div class="pulso-q-toggle">${q.comments.length>0 ? '[ + ]' : ''}</div>
         </div>
-        ${obs.length>0 ? `
+        ${q.comments.length>0 ? `
           <div class="pulso-q-body">
-            <ul class="pulso-obs">
-              ${obs.map(c => `
-                <li class="pulso-obs-item">
-                  ${c.score != null || c.fecha ? `<span class="pulso-obs-tag">${c.score != null ? `<span class="score-pill">${fmtNum(c.score)}/5</span>` : ''}${c.fecha ? `<span class="pulso-obs-fecha">${fmtMesAnio(c.fecha)}</span>` : ''}</span>` : ''}
-                  <span class="pulso-obs-text">${c.comment}</span>
-                </li>
-              `).join('')}
-            </ul>
+            ${q.comments.map(c => `
+              <div class="pulso-comment">
+                <div class="pulso-comment-meta">
+                  ${c.auditor || 'Auditor'} · ${c.fecha ? fmtFecha(c.fecha) : ''}
+                  ${c.score != null ? `<span class="score-pill">${fmtNum(c.score)}/5</span>` : ''}
+                </div>
+                ${c.comment}
+              </div>
+            `).join('')}
           </div>
         ` : ''}
       </div>
