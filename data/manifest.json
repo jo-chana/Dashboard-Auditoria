@@ -55,6 +55,13 @@
       "file": "central.json",
       "fecha": "2026-06-15",
       "auditor": "Emilio Merino S."
+    },
+    {
+      "name": "BOLDO",
+      "slug": "boldo",
+      "file": "boldo.json",
+      "fecha": "2026-06-16",
+      "auditor": "Emilio Merino S."
     }
   ],
   "order": [
@@ -65,6 +72,7 @@
     "SOHO",
     "SPOT Residence",
     "Nativo",
-    "Central"
+    "Central",
+    "BOLDO"
   ]
 }
