@@ -2475,25 +2475,27 @@ function renderPulso() {
     if (q.avg == null) return;
     const cls = scoreColorClass(q.avg, 5);
     const pct = (q.avg / 5) * 100;
+    // Resumen del mes: fusiona los comentarios en un solo texto anónimo (sin autor/fecha/nota).
+    const _txts = (q.comments || []).map(c => c && c.comment).filter(t => t && String(t).trim());
+    const _uniq = [...new Set(_txts.map(t => String(t).trim().replace(/\s+/g, ' ')))];
+    const _resumen = _uniq
+      .map(t => { t = t.replace(/[.;\s]+$/, '').trim(); return t.charAt(0).toUpperCase() + t.slice(1); })
+      .join('. ') + (_uniq.length ? '.' : '');
+    const _hasC = _uniq.length > 0;
     html += `
       <div class="pulso-question" data-q="${i}">
         <div class="pulso-q-header" onclick="togglePulsoQ(${i})">
           <div class="pulso-q-label">${q.label}</div>
           <div class="pulso-q-score ${cls}">${fmtNum(q.avg)}<span class="max">/5</span></div>
           <div class="pulso-q-bar"><div class="pulso-q-bar-fill ${cls}" style="width:${pct}%"></div></div>
-          <div class="pulso-q-toggle">${q.comments.length>0 ? '[ + ]' : ''}</div>
+          <div class="pulso-q-toggle">${_hasC ? '[ + ]' : ''}</div>
         </div>
-        ${q.comments.length>0 ? `
+        ${_hasC ? `
           <div class="pulso-q-body">
-            ${q.comments.map(c => `
-              <div class="pulso-comment">
-                <div class="pulso-comment-meta">
-                  ${c.auditor || 'Auditor'} · ${c.fecha ? fmtFecha(c.fecha) : ''}
-                  ${c.score != null ? `<span class="score-pill">${fmtNum(c.score)}/5</span>` : ''}
-                </div>
-                ${c.comment}
-              </div>
-            `).join('')}
+            <div class="pulso-comment">
+              <div class="pulso-comment-meta">Resumen del mes</div>
+              ${_resumen}
+            </div>
           </div>
         ` : ''}
       </div>
