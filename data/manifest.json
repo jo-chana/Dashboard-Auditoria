@@ -62,6 +62,13 @@
       "file": "boldo.json",
       "fecha": "2026-06-16",
       "auditor": "Emilio Merino S."
+    },
+    {
+      "name": "Park",
+      "slug": "park",
+      "file": "park.json",
+      "fecha": "2026-06-23",
+      "auditor": "Emilio Merino S."
     }
   ],
   "order": [
@@ -73,6 +80,7 @@
     "SPOT Residence",
     "Nativo",
     "Central",
-    "BOLDO"
+    "BOLDO",
+    "Park"
   ]
 }
