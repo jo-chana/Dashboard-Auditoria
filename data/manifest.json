@@ -69,6 +69,20 @@
       "file": "park.json",
       "fecha": "2026-06-23",
       "auditor": "Emilio Merino S."
+    },
+    {
+      "name": "BLEND",
+      "slug": "blend",
+      "file": "blend.json",
+      "fecha": "2026-07-02",
+      "auditor": "Emilio Merino S."
+    },
+    {
+      "name": "Bellet",
+      "slug": "bellet",
+      "file": "bellet.json",
+      "fecha": "2026-07-03",
+      "auditor": "Emilio Merino S."
     }
   ],
   "order": [
@@ -81,6 +95,8 @@
     "Nativo",
     "Central",
     "BOLDO",
-    "Park"
+    "Park",
+    "BLEND",
+    "Bellet"
   ]
 }
